@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <title>كأس العالم 2026 - الأدوار النهائية</title>
+
+    <style>
+        body {
+            font-family: Tahoma, Arial;
+            background: #f3f3f3;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #006400;
+        }
+
+        h2 {
+            background: #006400;
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .info {
+            text-align: center;
+            margin: 15px;
+        }
+
+        button {
+            background: #006400;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: #004d00;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px #ccc;
+        }
+
+        th {
+            background: #222;
+            color: white;
+            padding: 10px;
+        }
+
+        td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:hover {
+            background: #eee;
+        }
+
+        .score {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .loading {
+            text-align: center;
+            font-size: 20px;
+        }
+
+        .flag-icon {
+            font-size: 1.3rem;
+            margin-left: 5px;
+        }
+
+        /* تحسين المظهر للهواتف */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+
+            table {
+                font-size: 14px;
+            }
+
+            th,
+            td {
+                padding: 6px 4px;
+            }
+
+            .score {
+                font-size: 16px;
+            }
+
+            button {
+                padding: 8px 14px;
+                font-size: 14px;
+            }
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+    <h1>🏆 كأس العالم 2026 - الأدوار النهائية</h1>
+
+    <div class="info">
+        <button onclick="loadGames()">🔄 تحديث الآن</button>
+        <p id="update">آخر تحديث: -</p>
+    </div>
+
+    <div id="content" class="loading">
+        جاري تحميل المباريات...
+    </div>
+
+    <script>
+        // ============================================================
+        //  CONFIGURATION
+        // ============================================================
+        const API = "https://worldcup26.ir/get/games";
+
+        // ============================================================
+        //  TRANSLATION HELPERS (من الملف الأول)
+        // ============================================================
+        const nameMapping = {
+            "مکزیک": "المكسيك",
+            "Mexico": "المكسيك",
+            "مكسيك": "المكسيك",
+            "آفریقای جنوبی": "جنوب أفريقيا",
+            "South Africa": "جنوب أفريقيا",
+            "افریقای جنوبی": "جنوب أفريقيا",
+            "کره جنوبی": "كوريا الجنوبية",
+            "South Korea": "كوريا الجنوبية",
+            "جمهوری چک": "التشيك",
+            "Czech Republic": "التشيك",
+            "چک": "التشيك",
+            "کانادا": "كندا",
+            "Canada": "كندا",
+            "بوسنی و هرزگوین": "البوسنة والهرسك",
+            "Bosnia and Herzegovina": "البوسنة والهرسك",
+            "آمریکا": "أمريكا",
+            "United States": "أمريكا",
+            "امریکا": "أمريكا",
+            "پاراگوئه": "باراغواي",
+            "Paraguay": "باراغواي",
+            "هائیتی": "هايتي",
+            "Haiti": "هايتي",
+            "اسکاتلند": "إسكتلندا",
+            "Scotland": "إسكتلندا",
+            "برزیل": "البرازيل",
+            "Brazil": "البرازيل",
+            "برزیل": "البرازيل",
+            "مراکش": "المغرب",
+            "Morocco": "المغرب",
+            "مراكش": "المغرب",
+            "قطر": "قطر",
+            "Qatar": "قطر",
+            "سوئیس": "سويسرا",
+            "Switzerland": "سويسرا",
+            "سویس": "سويسرا",
+            "ساحل عاج": "ساحل العاج",
+            "Ivory Coast": "ساحل العاج",
+            "اکوادور": "الإكوادور",
+            "Ecuador": "الإكوادور",
+            "آلمان": "ألمانيا",
+            "Germany": "ألمانيا",
+            "کوراسائو": "كوراساو",
+            "Curaçao": "كوراساو",
+            "کوراساو": "كوراساو",
+            "هلند": "هولندا",
+            "Netherlands": "هولندا",
+            "ژاپن": "اليابان",
+            "Japan": "اليابان",
+            "سوئد": "السويد",
+            "Sweden": "السويد",
+            "تونس": "تونس",
+            "Tunisia": "تونس",
+            "ایران": "إيران",
+            "Iran": "إيران",
+            "نیوزیلند": "نيوزيلندا",
+            "New Zealand": "نيوزيلندا",
+            "اسپانیا": "إسبانيا",
+            "Spain": "إسبانيا",
+            "کیپ ورد": "الرأس الأخضر",
+            "Cape Verde": "الرأس الأخضر",
+            "بلژیک": "بلجيكا",
+            "Belgium": "بلجيكا",
+            "مصر": "مصر",
+            "Egypt": "مصر",
+            "عربستان": "السعودية",
+            "عربستان سعودی": "السعودية",
+            "سعودی": "السعودية",
+            "Saudi Arabia": "السعودية",
+            "اروگوئه": "أوروغواي",
+            "Uruguay": "أوروغواي",
+            "فرانسه": "فرنسا",
+            "France": "فرنسا",
+            "سنگال": "السنغال",
+            "Senegal": "السنغال",
+            "عراق": "العراق",
+            "Iraq": "العراق",
+            "نروژ": "النرويج",
+            "Norway": "النرويج",
+            "آرژانتین": "الأرجنتين",
+            "Argentina": "الأرجنتين",
+            "ارژانتین": "الأرجنتين",
+            "الجزایر": "الجزائر",
+            "Algeria": "الجزائر",
+            "اتریش": "النمسا",
+            "Austria": "النمسا",
+            "اتریش": "النمسا",
+            "اردن": "الأردن",
+            "Jordan": "الأردن",
+            "پرتغال": "البرتغال",
+            "پرتقال": "البرتغال",
+            "Portugal": "البرتغال",
+            "جمهوری دموکراتیک کنگو": "جمهورية الكونغو الديمقراطية",
+            "کنگو دمکراتیک": "جمهورية الكونغو الديمقراطية",
+            "کنگو دموکراتیک": "جمهورية الكونغو الديمقراطية",
+            "جمهوری کنگو": "جمهورية الكونغو الديمقراطية",
+            "Democratic Republic of the Congo": "جمهورية الكونغو الديمقراطية",
+            "DR Congo": "جمهورية الكونغو الديمقراطية",
+            "Congo DR": "جمهورية الكونغو الديمقراطية",
+            "Congo (DR)": "جمهورية الكونغو الديمقراطية",
+            "Congo": "جمهورية الكونغو الديمقراطية",
+            "الكونغو": "جمهورية الكونغو الديمقراطية",
+            "انگلستان": "إنجلترا",
+            "England": "إنجلترا",
+            "کرواسی": "كرواتيا",
+            "Croatia": "كرواتيا",
+            "ازبکستان": "أوزبكستان",
+            "Uzbekistan": "أوزبكستان",
+            "کلمبیا": "كولومبيا",
+            "Colombia": "كولومبيا",
+            "غنا": "غانا",
+            "Ghana": "غانا",
+            "پاناما": "بنما",
+            "Panama": "بنما",
+            "استرالیا": "أستراليا",
+            "Australia": "أستراليا",
+            "ترکیه": "تركيا",
+            "Turkey": "تركيا"
+        };
+
+        const reverseMapping = {};
+        for (let [key, value] of Object.entries(nameMapping)) {
+            if (!reverseMapping[value]) reverseMapping[value] = [];
+            if (!reverseMapping[value].includes(key)) reverseMapping[value].push(key);
+        }
+
+        function translateToArabic(raw) {
+            if (!raw) return "";
+            let trimmed = raw.trim();
+            if (nameMapping[trimmed]) return nameMapping[trimmed];
+            let lower = trimmed.toLowerCase();
+            for (let [key, value] of Object.entries(nameMapping)) {
+                if (key.toLowerCase() === lower) return value;
+            }
+            if (trimmed.includes("کنگو") || trimmed.includes("الكونغو") || trimmed.toLowerCase().includes("congo")) {
+                return "جمهورية الكونغو الديمقراطية";
+            }
+            return trimmed;
+        }
+
+        // ============================================================
+        //  EMOJI FLAGS (إضافي للجمال)
+        // ============================================================
+        function getFlag(name) {
+            const map = {
+                "المكسيك": "🇲🇽",
+                "جنوب أفريقيا": "🇿🇦",
+                "الأرجنتين": "🇦🇷",
+                "الجزائر": "🇩🇿",
+                "النمسا": "🇦🇹",
+                "الأردن": "🇯🇴",
+                "البرتغال": "🇵🇹",
+                "جمهورية الكونغو الديمقراطية": "🇨🇩",
+                "كوريا الجنوبية": "🇰🇷",
+                "التشيك": "🇨🇿",
+                "كندا": "🇨🇦",
+                "البوسنة والهرسك": "🇧🇦",
+                "أمريكا": "🇺🇸",
+                "العراق": "🇮🇶",
+                "سويسرا": "🇨🇭",
+                "قطر": "🇶🇦",
+                "البرازيل": "🇧🇷",
+                "المغرب": "🇲🇦",
+                "هايتي": "🇭🇹",
+                "إسكتلندا": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
+                "أستراليا": "🇦🇺",
+                "تركيا": "🇹🇷",
+                "ألمانيا": "🇩🇪",
+                "كوراساو": "🇨🇼",
+                "اليابان": "🇯🇵",
+                "هولندا": "🇳🇱",
+                "الإكوادور": "🇪🇨",
+                "ساحل العاج": "🇨🇮",
+                "السويد": "🇸🇪",
+                "تونس": "🇹🇳",
+                "إسبانيا": "🇪🇸",
+                "الرأس الأخضر": "🇨🇻",
+                "مصر": "🇪🇬",
+                "بلجيكا": "🇧🇪",
+                "السعودية": "🇸🇦",
+                "أوروغواي": "🇺🇾",
+                "إيران": "🇮🇷",
+                "نيوزيلندا": "🇳🇿",
+                "السنغال": "🇸🇳",
+                "فرنسا": "🇫🇷",
+                "النرويج": "🇳🇴",
+                "إنجلترا": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+                "كرواتيا": "🇭🇷",
+                "بنما": "🇵🇦",
+                "كولومبيا": "🇨🇴",
+                "أوزبكستان": "🇺🇿",
+                "غانا": "🇬🇭",
+                "باراغواي": "🇵🇾"
+            };
+            return map[name] || "🏁";
+        }
+
+        // ============================================================
+        //  CHECK FUNCTION (لتحديد الأدوار)
+        // ============================================================
+        function check(match, values) {
+            return values.some(v =>
+                String(match.type || "")
+                .toLowerCase()
+                .includes(v.toLowerCase()) ||
+                String(match.group || "")
+                .toLowerCase()
+                .includes(v.toLowerCase())
+            );
+        }
+
+        // ============================================================
+        //  LOAD GAMES
+        // ============================================================
+        async function loadGames() {
+            try {
+                document.getElementById("content").innerHTML =
+                    `<div class="loading">جاري تحديث البيانات...</div>`;
+
+                const response = await fetch(API + "?time=" + Date.now());
+                const data = await response.json();
+                const games = Array.isArray(data) ? data : data.games;
+
+                if (!games) {
+                    throw "لا توجد بيانات مباريات";
+                }
+
+                console.log("Games:", games);
+
+                // ============================================================
+                //  تحديد الأدوار
+                // ============================================================
+                const rounds = {
+                    "ربع النهائي": m =>
+                        check(m, ["qf", "quarter", "quarter_final", "quarter-final"]),
+
+                    "نصف النهائي": m =>
+                        check(m, ["sf", "semi", "semi_final", "semi-final"]),
+
+                    "المركز الثالث": m =>
+                        check(m, ["3rd", "third", "third_place", "third-place"]),
+
+                    "النهائي": m =>
+                        check(m, ["final", "championship", "winner"])
+                };
+
+                let html = "";
+
+                for (let round in rounds) {
+                    let matches = games.filter(rounds[round]);
+
+                    html += `<h2>${round}</h2>`;
+
+                    if (matches.length === 0) {
+                        html += `
+                            <table>
+                                <tr><td>لم يتم تحديد المباراة بعد</td></tr>
+                            </table>
+                        `;
+                        continue;
+                    }
+
+                    html += `
+                        <table>
+                            <tr>
+                                <th>الفريق الأول</th>
+                                <th>النتيجة</th>
+                                <th>الفريق الثاني</th>
+                                <th>التاريخ</th>
+                                <th>الحالة</th>
+                            </tr>
+                    `;
+
+                    matches.forEach(match => {
+                        // ----- استخدام الترجمة الذكية -----
+                        let homeRaw = match.home_team_name_fa ||
+                            match.home_team_name_en ||
+                            match.home_team_label ||
+                            "-";
+                        let awayRaw = match.away_team_name_fa ||
+                            match.away_team_name_en ||
+                            match.away_team_label ||
+                            "-";
+
+                        let home = translateToArabic(homeRaw);
+                        let away = translateToArabic(awayRaw);
+
+                        // إضافة العلم
+                        let homeFlag = getFlag(home);
+                        let awayFlag = getFlag(away);
+
+                        html += `
+                            <tr>
+                                <td>
+                                    <span class="flag-icon">${homeFlag}</span>
+                                    ${home}
+                                </td>
+                                <td class="score">
+                                    ${match.home_score ?? "-"}
+                                    -
+                                    ${match.away_score ?? "-"}
+                                </td>
+                                <td>
+                                    <span class="flag-icon">${awayFlag}</span>
+                                    ${away}
+                                </td>
+                                <td>${match.local_date || "-"}</td>
+                                <td>${match.time_elapsed || "لم تبدأ"}</td>
+                            </tr>
+                        `;
+                    });
+
+                    html += `</table>`;
+                }
+
+                document.getElementById("content").innerHTML = html;
+                document.getElementById("update").innerHTML =
+                    "آخر تحديث: " + new Date().toLocaleTimeString("ar-SA");
+
+            } catch (error) {
+                console.error(error);
+                document.getElementById("content").innerHTML = `
+                    <h2>حدث خطأ</h2>
+                    <p>${error}</p>
+                `;
+            }
+        }
+
+        // ============================================================
+        //  تشغيل التحميل والتحديث التلقائي
+        // ============================================================
+        loadGames();
+        setInterval(loadGames, 60000);
+    </script>
+
+</body>
+
+</html>
