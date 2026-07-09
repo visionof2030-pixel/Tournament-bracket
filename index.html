@@ -1,199 +1,749 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
-    <meta charset="UTF-8">
-    <title>كأس العالم 2026 - الأدوار النهائية</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>🏆 الأدوار النهائية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
     </script>
     <style>
+        /* ============================================================
+           ROOT & RESET – عصري، نظيف، أنيق
+           ============================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --bg-primary: #0a0e17;
+            --bg-secondary: #111927;
+            --bg-card: rgba(17, 25, 40, 0.85);
+            --bg-card-hover: rgba(30, 45, 70, 0.92);
+            --bg-input: rgba(255, 255, 255, 0.04);
+            --gold: #d4a745;
+            --gold-light: #f0d080;
+            --gold-glow: rgba(212, 167, 69, 0.15);
+            --gold-gradient: linear-gradient(135deg, #e8c86a, #c99a2e);
+            --text-primary: #edf2f7;
+            --text-secondary: #8a9bb5;
+            --text-muted: #5a6f8c;
+            --success: #2ecc71;
+            --success-bg: rgba(46, 204, 113, 0.10);
+            --danger: #e74c3c;
+            --danger-bg: rgba(231, 76, 60, 0.10);
+            --info: #4a9eff;
+            --info-bg: rgba(74, 158, 255, 0.10);
+            --border-subtle: rgba(255, 255, 255, 0.04);
+            --border-gold: rgba(212, 167, 69, 0.20);
+            --shadow-card: 0 12px 48px rgba(0, 0, 0, 0.50), 0 0 0 1px rgba(255, 255, 255, 0.02);
+            --shadow-glow: 0 0 60px rgba(212, 167, 69, 0.04);
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 10px;
+            --transition: all 0.30s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #f4f6f9;
+            --bg-secondary: #ffffff;
+            --bg-card: rgba(255, 255, 255, 0.92);
+            --bg-card-hover: rgba(255, 255, 255, 0.98);
+            --bg-input: rgba(0, 0, 0, 0.02);
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --border-subtle: rgba(0, 0, 0, 0.06);
+            --border-gold: rgba(212, 167, 69, 0.30);
+            --shadow-card: 0 12px 48px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(0, 0, 0, 0.02);
+            --shadow-glow: 0 0 60px rgba(212, 167, 69, 0.06);
+            --gold-glow: rgba(212, 167, 69, 0.12);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: Tahoma, Arial;
-            background: #f3f3f3;
-            padding: 20px;
+            font-family: 'Cairo', 'Segoe UI', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            font-size: 14px;
+            line-height: 1.7;
+            transition: var(--transition);
+            padding: 0;
+            margin: 0;
         }
 
-        h1 {
-            text-align: center;
-            color: #006400;
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--gold);
+            border-radius: 10px;
         }
 
-        h2 {
-            background: #006400;
-            color: white;
-            padding: 10px;
-            border-radius: 8px;
-            margin-top: 20px;
+        .app-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 16px 48px;
+            width: 100%;
         }
 
-        .info {
-            text-align: center;
-            margin: 15px;
+        /* ============================================================
+           HEADER
+           ============================================================ */
+        .top-bar {
+            width: 100%;
+            min-height: 120px;
+            padding: 12px 24px;
+            position: relative;
+            overflow: hidden;
+            background: var(--bg-secondary);
+            border-bottom: 2px solid var(--gold);
+            box-shadow: 0 8px 40px rgba(212, 167, 69, 0.06);
+            display: flex;
+            align-items: center;
+        }
+        .top-bar .trophy-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 20%;
+            opacity: 0.15;
+            z-index: 0;
+            pointer-events: none;
+            filter: brightness(0.6) saturate(0.8);
+        }
+        .top-bar .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(10, 14, 23, 0.88) 0%, rgba(10, 14, 23, 0.40) 100%);
+            z-index: 1;
+            pointer-events: none;
+        }
+        .top-bar .top-bar-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            position: relative;
+            z-index: 2;
+        }
+        .top-bar .top-bar-title {
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.30);
+            padding: 6px 20px 6px 24px;
+            border-radius: 60px;
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            letter-spacing: 0.5px;
+        }
+        .top-bar .top-bar-title .icon {
+            font-size: 1.4rem;
+        }
+        .top-bar .top-bar-title .gold-text {
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: none;
+        }
+        .top-bar .top-bar-sub {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.25);
+            padding: 6px 18px;
+            border-radius: 60px;
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .top-bar .top-bar-sub .emoji {
+            font-size: 1.1rem;
         }
 
-        button {
-            background: #006400;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
+        [data-theme="light"] .top-bar {
+            background: #ffffff;
+            border-bottom-color: var(--gold);
+            box-shadow: 0 8px 40px rgba(212, 167, 69, 0.10);
+        }
+        [data-theme="light"] .top-bar .overlay {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.90) 0%, rgba(255, 255, 255, 0.50) 100%);
+        }
+        [data-theme="light"] .top-bar .top-bar-title,
+        [data-theme="light"] .top-bar .top-bar-sub {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.80);
+            border-color: rgba(0, 0, 0, 0.04);
+            text-shadow: none;
+        }
+        [data-theme="light"] .top-bar .top-bar-title .gold-text {
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(10, 14, 23, 0.92);
+            backdrop-filter: blur(20px);
+            border-radius: 0 0 28px 28px;
+            padding: 14px 24px;
+            margin: 0 -16px 24px;
+            border-bottom: 1px solid var(--border-gold);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.40);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            transition: var(--transition);
+        }
+        [data-theme="light"] .sticky-header {
+            background: rgba(255, 255, 255, 0.92);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.04);
+        }
+        .sticky-header .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .sticky-header .brand h1 {
+            font-size: 1.15rem;
+            font-weight: 900;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
+        }
+        .sticky-header .brand .sub {
+            font-size: 0.55rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            display: block;
+            margin-top: -2px;
+            letter-spacing: 0.3px;
+        }
+        .sticky-header .header-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .sticky-header .header-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            color: var(--text-secondary);
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 600;
             cursor: pointer;
-            font-size: 16px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-family: inherit;
+            backdrop-filter: blur(4px);
+        }
+        .sticky-header .header-btn:hover {
+            background: var(--gold-glow);
+            border-color: var(--gold);
+            color: var(--gold-light);
+            transform: translateY(-2px);
+        }
+        [data-theme="light"] .sticky-header .header-btn {
+            background: rgba(0, 0, 0, 0.03);
+            border-color: rgba(0, 0, 0, 0.06);
+            color: var(--text-secondary);
+        }
+        [data-theme="light"] .sticky-header .header-btn:hover {
+            background: var(--gold-glow);
+            border-color: var(--gold);
+            color: var(--gold);
         }
 
-        button:hover {
-            background: #004d00;
+        /* ============================================================
+           INFO BAR
+           ============================================================ */
+        .info-bar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+            padding: 4px 14px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-gold);
+            border-radius: var(--radius-lg);
+            backdrop-filter: blur(14px);
+            box-shadow: var(--shadow-card);
+            min-height: 32px;
+        }
+        .info-bar .update-time {
+            font-size: 0.55rem;
+            color: var(--text-secondary);
+        }
+        .info-bar .btn-refresh {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            padding: 3px 12px;
+            border-radius: 40px;
+            font-size: 0.5rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+        .info-bar .btn-refresh:hover {
+            background: var(--gold-glow);
+            border-color: var(--gold);
+            color: var(--gold-light);
+            transform: translateY(-1px);
+        }
+
+        /* ============================================================
+           MATCHES GRID
+           ============================================================ */
+        .matches-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 18px;
+        }
+
+        .match-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            border-radius: var(--radius-lg);
+            padding: 18px 20px;
+            border: 1px solid var(--border-subtle);
+            transition: var(--transition);
+            box-shadow: var(--shadow-card);
+        }
+        .match-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--border-gold);
+        }
+        .match-card.live {
+            border-color: var(--danger);
+            box-shadow: 0 0 40px rgba(231, 76, 60, 0.08);
+        }
+        .match-card.finished-match {
+            border-color: rgba(46, 204, 113, 0.20);
+            opacity: 0.85;
+        }
+        .match-card.finished-match:hover {
+            opacity: 1;
+        }
+
+        .match-teams {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            background: rgba(0, 0, 0, 0.20);
+            padding: 12px 16px;
+            border-radius: 60px;
+            backdrop-filter: blur(4px);
+        }
+        .match-team {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            flex: 1;
+            justify-content: center;
+        }
+        .match-team .flag {
+            font-size: 1.3rem;
+        }
+        .match-score {
+            background: var(--gold-gradient);
+            padding: 2px 18px;
+            border-radius: 40px;
+            font-weight: 800;
+            font-size: 0.9rem;
+            color: #0a0e1a;
+            min-width: 50px;
+            text-align: center;
+        }
+        .match-score.live {
+            background: linear-gradient(135deg, var(--danger), #c0392b);
+            animation: pulseScore 1.2s infinite;
+            color: #fff;
+        }
+        .match-score.finished {
+            background: linear-gradient(135deg, var(--success), #27ae60);
+            color: #fff;
+        }
+        .match-score.upcoming {
+            background: var(--gold-gradient);
+            color: #0a0e1a;
+        }
+        @keyframes pulseScore {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); box-shadow: 0 0 30px rgba(231, 76, 60, 0.20); }
+        }
+
+        /* ===== نسبة الفوز ===== */
+        .win-probability {
+            margin: 12px 0 10px 0;
+            padding: 10px 14px;
+            background: rgba(0, 0, 0, 0.15);
+            border-radius: var(--radius-sm);
+        }
+        .win-probability .prob-title {
+            font-size: 0.6rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+            text-align: center;
+        }
+        .win-probability .prob-bar {
+            display: flex;
+            height: 18px;
+            border-radius: 30px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.04);
+            margin-bottom: 4px;
+        }
+        .win-probability .prob-bar .segment {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.5rem;
+            font-weight: 700;
+            color: #0a0e1a;
+            transition: width 0.6s ease;
+            height: 100%;
+        }
+        .win-probability .prob-bar .segment.home {
+            background: var(--success);
+        }
+        .win-probability .prob-bar .segment.away {
+            background: var(--danger);
+        }
+        .win-probability .prob-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.5rem;
+            color: var(--text-secondary);
+        }
+        .win-probability .prob-labels .label {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .win-probability .prob-labels .dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        .win-probability .prob-labels .dot.home {
+            background: var(--success);
+        }
+        .win-probability .prob-labels .dot.away {
+            background: var(--danger);
+        }
+        .win-probability .prob-labels .percent {
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .match-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .match-meta .tag {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 4px 16px;
+            border-radius: 40px;
+            font-size: 0.6rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-subtle);
+        }
+        .match-meta .tag.finished-tag {
+            color: var(--success);
+            background: var(--success-bg);
+            border-color: rgba(46, 204, 113, 0.10);
+        }
+        .match-meta .tag.stadium-tag {
+            color: var(--info);
+            background: var(--info-bg);
+            border-color: rgba(74, 158, 255, 0.10);
+        }
+        .match-meta .timer {
+            font-family: 'Courier New', monospace;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+        }
+        .match-meta .timer.live {
+            color: var(--danger);
+            animation: pulseText 1s infinite;
+        }
+        .match-meta .timer.soon {
+            color: var(--gold-light);
+        }
+        @keyframes pulseText {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .score-penalty-badge {
+            font-size: 0.7rem;
+            color: var(--gold);
+            background: var(--gold-glow);
+            padding: 1px 14px;
+            border-radius: 30px;
+            border: 1px solid var(--border-gold);
+            display: inline-block;
+            margin-right: 6px;
+        }
+
+        /* ============================================================
+           BUTTONS
+           ============================================================ */
+        .match-actions {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-subtle);
         }
 
         .btn-predict {
-            background: #d4a745;
-            color: #0a0e1a;
-            padding: 6px 14px;
-            font-size: 13px;
-            border-radius: 20px;
-            font-weight: bold;
-            border: none;
+            background: var(--bg-card);
+            border: 2px solid var(--border-gold);
+            color: var(--gold-light);
+            padding: 10px 28px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 800;
             cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 120px;
+            justify-content: center;
+            letter-spacing: 0.3px;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
         }
-
+        .btn-predict::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, var(--gold-glow), transparent 60%);
+            opacity: 0;
+            transition: var(--transition);
+            pointer-events: none;
+        }
+        .btn-predict:hover:not(:disabled)::before {
+            opacity: 0.3;
+        }
         .btn-predict:hover:not(:disabled) {
-            background: #c99a2e;
+            transform: translateY(-3px) scale(1.03);
+            border-color: var(--border-gold-strong);
+            box-shadow: 0 10px 40px rgba(212, 167, 69, 0.25), inset 0 0 40px rgba(212, 167, 69, 0.05);
+            background: var(--bg-card-hover);
         }
-
+        .btn-predict:active:not(:disabled) {
+            transform: scale(0.97);
+        }
         .btn-predict:disabled {
             opacity: 0.5;
             cursor: not-allowed;
-            background: #aaa;
-            color: #fff;
+            transform: none !important;
+            box-shadow: none;
         }
-
         .btn-predict.saved {
-            background: #2ecc71;
-            color: white;
+            background: var(--success-bg);
+            border: 2px solid rgba(49, 214, 122, 0.30);
+            color: var(--success);
+            box-shadow: none;
+        }
+        .btn-predict.saved:disabled {
+            opacity: 0.7;
         }
 
         .btn-stats {
-            background: #4a9eff;
-            color: white;
-            padding: 4px 12px;
-            font-size: 12px;
-            border-radius: 20px;
-            border: none;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-size: 0.65rem;
+            font-weight: 700;
             cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
-
         .btn-stats:hover {
-            background: #3a8eef;
+            background: var(--info-bg);
+            border-color: var(--info);
+            color: var(--info);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 24px rgba(74, 158, 255, 0.12);
         }
 
         .btn-view-predictions {
-            background: #9b59b6;
-            color: white;
-            padding: 4px 12px;
-            font-size: 12px;
-            border-radius: 20px;
-            border: none;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-size: 0.65rem;
+            font-weight: 700;
             cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
-
         .btn-view-predictions:hover {
-            background: #8e44ad;
+            background: var(--gold-glow);
+            border-color: var(--gold);
+            color: var(--gold-light);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 24px rgba(212, 167, 69, 0.12);
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            margin-bottom: 30px;
-            box-shadow: 0 2px 8px #ccc;
+        .btn-share {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            padding: 10px 16px;
+            border-radius: 40px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .btn-share:hover {
+            background: var(--info-bg);
+            border-color: var(--info);
+            color: var(--info);
+            transform: translateY(-3px);
         }
 
-        th {
-            background: #222;
-            color: white;
-            padding: 10px;
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .section-title .gold {
+            color: var(--gold);
+        }
+        .section-title .badge-count {
+            background: var(--gold-glow);
+            color: var(--gold-light);
+            font-size: 0.65rem;
+            padding: 2px 14px;
+            border-radius: 40px;
+            font-weight: 600;
+            border: 1px solid var(--border-gold);
         }
 
-        td {
-            padding: 10px;
+        .empty-state {
             text-align: center;
-            border-bottom: 1px solid #ddd;
+            padding: 48px 20px;
+            color: var(--text-secondary);
+            background: rgba(255, 255, 255, 0.01);
+            border-radius: var(--radius-lg);
+            border: 1px dashed var(--border-subtle);
+            grid-column: 1/-1;
+        }
+        .empty-state .icon {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 12px;
         }
 
-        tr:hover {
-            background: #eee;
-        }
-
-        .score {
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        .loading {
+        /* ============================================================
+           RESTRICTED MESSAGE
+           ============================================================ */
+        .restricted-message {
+            background: linear-gradient(135deg, var(--gold-glow), transparent);
+            border: 1px solid var(--border-gold);
+            border-radius: var(--radius-sm);
+            padding: 8px 16px;
+            font-size: 0.6rem;
+            color: var(--gold-light);
             text-align: center;
-            font-size: 20px;
+            font-weight: 700;
         }
 
-        .flag-icon {
-            font-size: 1.3rem;
-            margin-left: 5px;
-        }
-
-        .win-prob {
-            font-size: 12px;
-            color: #555;
-        }
-
-        .win-prob .bar {
-            display: inline-block;
-            height: 8px;
-            border-radius: 4px;
-            margin: 0 4px;
-        }
-
-        .win-prob .bar.home {
-            background: #2ecc71;
-        }
-
-        .win-prob .bar.away {
-            background: #e74c3c;
-        }
-
-        .status-badge {
-            font-size: 12px;
-            padding: 2px 12px;
-            border-radius: 20px;
-            font-weight: bold;
-            display: inline-block;
-        }
-
-        .status-badge.finished {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .status-badge.live {
-            background: #f8d7da;
-            color: #721c24;
-            animation: pulse 1.5s infinite;
-        }
-
-        .status-badge.not-started {
-            background: #e2e3e5;
-            color: #383d41;
-        }
-
-        @keyframes pulse {
-            0%,
-            100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.4;
-            }
-        }
-
-        /* مودال التوقع */
+        /* ============================================================
+           MODALS
+           ============================================================ */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -201,524 +751,719 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.80);
+            backdrop-filter: blur(20px);
             z-index: 9999;
             justify-content: center;
             align-items: center;
+            animation: fadeInModal 0.3s ease;
         }
-
         .modal-overlay.active {
             display: flex;
         }
+        @keyframes fadeInModal {
+            from { opacity: 0; transform: scale(0.96); }
+            to { opacity: 1; transform: scale(1); }
+        }
 
         .modal-content {
-            background: white;
-            border-radius: 12px;
-            padding: 30px;
-            max-width: 450px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-gold);
+            border-radius: var(--radius-lg);
+            padding: 28px 32px;
+            max-width: 720px;
             width: 95%;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.60);
             position: relative;
-            text-align: center;
         }
-
         .modal-close {
             position: absolute;
-            top: 10px;
-            left: 15px;
-            background: none;
+            top: 12px;
+            left: 16px;
+            background: rgba(255, 255, 255, 0.03);
             border: none;
-            font-size: 24px;
+            color: var(--text-secondary);
+            font-size: 1.4rem;
             cursor: pointer;
-            color: #999;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            z-index: 10;
         }
-
         .modal-close:hover {
-            color: #333;
+            background: var(--danger-bg);
+            color: var(--danger);
         }
-
         .modal-title {
-            font-size: 20px;
-            font-weight: bold;
-            color: #006400;
-            margin-bottom: 10px;
+            text-align: center;
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--gold-light);
+            margin-bottom: 16px;
+            padding-top: 6px;
         }
-
         .modal-teams {
-            font-size: 18px;
-            font-weight: bold;
-            margin: 10px 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 10px;
+            gap: 14px;
+            background: rgba(0, 0, 0, 0.15);
+            padding: 12px 16px;
+            border-radius: 60px;
+            margin-bottom: 16px;
+            backdrop-filter: blur(4px);
+        }
+        .modal-teams .m-team {
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9rem;
+        }
+        .modal-teams .m-team .flag {
+            font-size: 1.4rem;
+        }
+        .modal-teams .m-vs {
+            color: var(--text-secondary);
+            font-size: 0.7rem;
         }
 
-        .modal-teams .flag {
-            font-size: 28px;
+        .predictions-table-wrapper {
+            overflow-x: auto;
+            margin-top: 8px;
+        }
+        .predictions-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.7rem;
+            direction: rtl;
+        }
+        .predictions-table th {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-secondary);
+            padding: 6px 4px;
+            text-align: center;
+            font-weight: 700;
+            border-bottom: 2px solid var(--border-gold);
+            font-size: 0.6rem;
+        }
+        .predictions-table td {
+            padding: 4px 4px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-subtle);
+            font-size: 0.6rem;
+        }
+        .predictions-table .status-correct {
+            color: var(--success);
+            font-weight: 700;
+        }
+        .predictions-table .status-wrong {
+            color: var(--danger);
+            font-weight: 700;
+        }
+        .predictions-table .user-name {
+            font-weight: 800;
+            color: var(--gold-light);
+            cursor: pointer;
+        }
+        .predictions-table .user-name:hover {
+            text-decoration: underline;
+        }
+        .predictions-table .prediction-text.correct {
+            color: var(--success);
+        }
+        .predictions-table .prediction-text.wrong {
+            color: var(--danger);
+        }
+        .predictions-table .time-cell {
+            font-size: 0.5rem;
+            color: var(--text-secondary);
+            font-family: monospace;
+            white-space: nowrap;
         }
 
-        .modal-teams .team-name {
-            font-size: 18px;
-            font-weight: bold;
+        .predictions-stats {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 12px 0 16px;
+            flex-wrap: wrap;
         }
-
-        .modal-teams .vs {
-            color: #999;
-            font-size: 16px;
+        .predictions-stats .stat-item {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            background: rgba(255, 255, 255, 0.02);
+            padding: 6px 16px;
+            border-radius: 40px;
         }
 
         .modal-options {
             display: flex;
             flex-direction: column;
             gap: 8px;
-            margin: 15px 0;
-            text-align: right;
+            margin-bottom: 16px;
         }
-
         .modal-options label {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 10px 16px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
+            gap: 14px;
+            padding: 12px 18px;
+            border-radius: 60px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 2px solid transparent;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: var(--transition);
         }
-
         .modal-options label:hover {
-            border-color: #006400;
-            background: #f0f8f0;
+            background: rgba(255, 255, 255, 0.04);
+            border-color: var(--border-subtle);
         }
-
         .modal-options input[type="radio"] {
+            appearance: none;
             width: 18px;
             height: 18px;
-            accent-color: #006400;
+            border: 2px solid var(--text-secondary);
+            border-radius: 50%;
+            flex-shrink: 0;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
         }
-
+        .modal-options input[type="radio"]:checked {
+            border-color: var(--gold);
+            background: var(--gold);
+        }
+        .modal-options input[type="radio"]:checked::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #0a0e1a;
+            font-weight: 900;
+            font-size: 10px;
+        }
         .modal-options .opt-label {
-            font-weight: bold;
+            font-weight: 600;
         }
-
         .modal-options .opt-sub {
-            font-size: 13px;
-            color: #777;
-        }
-
-        .modal-input {
-            margin: 10px 0;
-        }
-
-        .modal-input input {
-            width: 100%;
-            padding: 10px 16px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-            text-align: center;
-        }
-
-        .modal-input input:focus {
-            border-color: #006400;
-            outline: none;
+            font-size: 0.6rem;
+            color: var(--text-secondary);
         }
 
         .modal-submit {
             width: 100%;
-            padding: 12px;
-            background: #006400;
-            color: white;
+            padding: 14px;
             border: none;
-            border-radius: 8px;
-            font-size: 18px;
-            font-weight: bold;
+            border-radius: 60px;
+            background: var(--gold-gradient);
+            color: #0a0e1a;
+            font-weight: 800;
+            font-size: 0.95rem;
             cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+            box-shadow: 0 4px 20px rgba(212, 167, 69, 0.15);
         }
-
         .modal-submit:hover {
-            background: #004d00;
+            transform: scale(1.02);
+            box-shadow: 0 8px 40px rgba(212, 167, 69, 0.25);
         }
-
         .modal-submit:disabled {
             opacity: 0.5;
             cursor: not-allowed;
+            transform: none;
         }
-
         .modal-message {
             margin-top: 12px;
-            padding: 10px;
-            border-radius: 8px;
-            font-weight: bold;
+            text-align: center;
+            font-size: 0.8rem;
+            padding: 8px 14px;
+            border-radius: 40px;
+            font-weight: 600;
         }
-
         .modal-message.success {
-            background: #d4edda;
-            color: #155724;
+            color: var(--success);
+            background: var(--success-bg);
         }
-
         .modal-message.error {
-            background: #f8d7da;
-            color: #721c24;
+            color: var(--danger);
+            background: var(--danger-bg);
         }
-
         .modal-message.warning {
-            background: #fff3cd;
-            color: #856404;
+            color: var(--gold-light);
+            background: var(--gold-glow);
         }
-
         .modal-message.info {
-            background: #d1ecf1;
-            color: #0c5460;
+            color: var(--info);
+            background: var(--info-bg);
         }
 
-        .user-status {
-            padding: 8px 16px;
-            border-radius: 8px;
-            margin: 10px 0;
-            font-weight: bold;
+        /* ============================================================
+           NAME MODAL
+           ============================================================ */
+        .name-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.80);
+            backdrop-filter: blur(20px);
+            z-index: 99998;
+            justify-content: center;
+            align-items: center;
+            animation: fadeInModal 0.3s ease;
         }
-
-        .user-status.existing {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .user-status.new {
-            background: #fff3cd;
-            color: #856404;
-        }
-
-        /* نافذة إحصائيات الفريقين */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-top: 10px;
-        }
-
-        .stats-grid .team-stats {
-            background: #f9f9f9;
-            border-radius: 8px;
-            padding: 16px;
-            border: 1px solid #eee;
-        }
-
-        .stats-grid .team-stats .team-name {
-            font-size: 18px;
-            font-weight: bold;
-            color: #006400;
-            border-bottom: 2px solid #006400;
-            padding-bottom: 8px;
-            margin-bottom: 10px;
-        }
-
-        .stats-grid .team-stats .stat-row {
+        .name-modal-overlay.active {
             display: flex;
-            justify-content: space-between;
-            padding: 4px 0;
-            border-bottom: 1px solid #eee;
-            font-size: 14px;
         }
-
-        .stats-grid .team-stats .stat-row .label {
-            color: #555;
+        .name-modal-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-gold);
+            border-radius: var(--radius-lg);
+            padding: 36px 32px;
+            max-width: 420px;
+            width: 95%;
+            text-align: center;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.60);
         }
-
-        .stats-grid .team-stats .stat-row .value {
-            font-weight: bold;
+        .name-modal-content .name-icon {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 12px;
         }
-
-        .stats-grid .team-stats .stat-row .value.gold {
-            color: #d4a745;
+        .name-modal-content .name-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--gold-light);
+            margin-bottom: 6px;
         }
-
-        .stats-grid .team-stats .stat-row .value.green {
-            color: #2ecc71;
+        .name-modal-content .name-sub {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
         }
-
-        .stats-grid .team-stats .stat-row .value.red {
-            color: #e74c3c;
-        }
-
-        .stats-grid .team-stats .streak {
-            font-size: 18px;
-            letter-spacing: 2px;
-            margin-top: 8px;
-            padding: 6px;
-            background: #eee;
-            border-radius: 4px;
+        .name-modal-content input {
+            width: 100%;
+            padding: 14px 20px;
+            border-radius: 60px;
+            border: 1px solid var(--border-subtle);
+            background: var(--bg-input);
+            color: var(--text-primary);
+            font-size: 1rem;
+            outline: none;
+            transition: var(--transition);
+            font-family: inherit;
             text-align: center;
         }
-
-        .stats-grid .team-stats .scorers {
-            margin-top: 8px;
-            font-size: 13px;
+        .name-modal-content input:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px var(--gold-glow);
         }
-
-        .stats-grid .team-stats .scorers .scorer {
-            display: inline-block;
-            background: #e8f5e9;
-            padding: 2px 10px;
-            border-radius: 20px;
-            margin: 2px;
-            font-size: 12px;
-        }
-
-        .stats-grid .team-stats .scorers .scorer .goals {
-            font-weight: bold;
-            color: #d4a745;
-        }
-
-        /* نافذة استعراض التوقعات */
-        .predictions-list {
-            max-height: 400px;
-            overflow-y: auto;
-            text-align: right;
-        }
-
-        .prediction-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 12px;
-            border-bottom: 1px solid #eee;
-            font-size: 14px;
-        }
-
-        .prediction-item .user {
-            font-weight: bold;
-            color: #006400;
+        .name-modal-content .name-btn {
+            margin-top: 16px;
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 60px;
+            background: var(--gold-gradient);
+            color: #0a0e1a;
+            font-weight: 800;
+            font-size: 1rem;
             cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+        .name-modal-content .name-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 32px rgba(212, 167, 69, 0.25);
+        }
+        .name-modal-content .name-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .name-modal-content .name-error {
+            margin-top: 12px;
+            color: var(--danger);
+            font-size: 0.85rem;
+            font-weight: 600;
+            min-height: 24px;
+        }
+        .name-modal-content .name-close {
+            margin-top: 12px;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            cursor: pointer;
+            font-family: inherit;
+            transition: var(--transition);
+        }
+        .name-modal-content .name-close:hover {
+            color: var(--text-primary);
+        }
+        .name-modal-content .user-status {
+            padding: 10px 16px;
+            border-radius: 60px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin: 12px 0;
+        }
+        .name-modal-content .user-status.existing {
+            background: var(--success-bg);
+            color: var(--success);
+            border: 1px solid rgba(46, 204, 113, 0.15);
+        }
+        .name-modal-content .user-status.new {
+            background: var(--gold-glow);
+            color: var(--gold-light);
+            border: 1px solid var(--border-gold);
         }
 
-        .prediction-item .user:hover {
-            text-decoration: underline;
-        }
-
-        .prediction-item .pred {
-            font-weight: bold;
-        }
-
-        .prediction-item .pred.correct {
-            color: #2ecc71;
-        }
-
-        .prediction-item .pred.wrong {
-            color: #e74c3c;
-        }
-
-        .prediction-item .status {
-            font-size: 12px;
-            padding: 2px 12px;
-            border-radius: 20px;
-            font-weight: bold;
-        }
-
-        .prediction-item .status.correct {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .prediction-item .status.wrong {
-            background: #f8d7da;
-            color: #721c24;
-        }
-
-        .prediction-item .status.pending {
-            background: #fff3cd;
-            color: #856404;
-        }
-
-        .prediction-item .time {
-            font-size: 11px;
-            color: #888;
-        }
-
-        .toast {
+        /* ============================================================
+           TOAST
+           ============================================================ */
+        .copy-toast {
             position: fixed;
-            bottom: 20px;
+            bottom: 24px;
             left: 50%;
             transform: translateX(-50%);
             background: rgba(46, 204, 113, 0.95);
-            color: white;
+            color: #fff;
             padding: 12px 28px;
-            border-radius: 30px;
-            font-weight: bold;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 0.85rem;
             z-index: 99999;
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.30);
+            animation: fadeInModal 0.3s ease;
+            backdrop-filter: blur(12px);
             display: none;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
         }
-
-        .toast.show {
+        .copy-toast.show {
             display: block;
         }
-
-        .toast.error {
+        .copy-toast.error {
             background: rgba(231, 76, 60, 0.95);
         }
 
-        @media (max-width: 600px) {
-            body {
-                padding: 10px;
-            }
+        /* ============================================================
+           FOOTER
+           ============================================================ */
+        .footer {
+            margin-top: 48px;
+            text-align: center;
+            font-size: 0.6rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border-subtle);
+            padding-top: 24px;
+            cursor: pointer;
+            transition: var(--transition);
+            user-select: none;
+        }
+        .footer:hover {
+            color: var(--gold-light);
+        }
 
-            table {
-                font-size: 13px;
+        /* ============================================================
+           RESPONSIVE
+           ============================================================ */
+        @media (max-width: 640px) {
+            .top-bar {
+                min-height: 90px;
+                padding: 8px 12px;
             }
-
-            th,
-            td {
-                padding: 6px 4px;
+            .top-bar .top-bar-content {
+                flex-wrap: wrap;
+                gap: 6px;
             }
-
-            .score {
-                font-size: 15px;
+            .top-bar .top-bar-title {
+                font-size: 0.8rem;
+                padding: 4px 14px;
+                gap: 6px;
             }
-
-            button {
+            .top-bar .top-bar-title .icon {
+                font-size: 1rem;
+            }
+            .top-bar .top-bar-sub {
+                font-size: 0.7rem;
+                padding: 4px 12px;
+            }
+            .app-container {
+                padding: 0 8px 32px;
+            }
+            .sticky-header {
+                padding: 10px 14px;
+                margin: 0 -8px 16px;
+                border-radius: 0 0 20px 20px;
+            }
+            .sticky-header .brand h1 {
+                font-size: 1rem;
+            }
+            .sticky-header .brand .sub {
+                font-size: 0.5rem;
+            }
+            .sticky-header .header-btn {
                 padding: 6px 12px;
-                font-size: 13px;
+                font-size: 0.6rem;
             }
-
-            .stats-grid {
+            .info-bar {
+                padding: 3px 10px;
+                gap: 4px;
+                margin-bottom: 8px;
+                min-height: 28px;
+            }
+            .info-bar .update-time {
+                font-size: 0.45rem;
+            }
+            .info-bar .btn-refresh {
+                font-size: 0.45rem;
+                padding: 2px 8px;
+            }
+            .matches-grid {
                 grid-template-columns: 1fr;
+                gap: 14px;
             }
-
+            .match-card {
+                padding: 14px 14px 12px;
+            }
+            .match-team {
+                font-size: 0.75rem;
+            }
+            .match-team .flag {
+                font-size: 1.1rem;
+            }
+            .match-score {
+                font-size: 0.75rem;
+                padding: 2px 12px;
+                min-width: 40px;
+            }
+            .match-meta .tag {
+                font-size: 0.5rem;
+                padding: 3px 10px;
+            }
+            .match-meta .timer {
+                font-size: 0.65rem;
+            }
+            .section-title {
+                font-size: 1rem;
+            }
             .modal-content {
                 padding: 20px;
+                max-width: 95%;
             }
-
             .modal-teams {
-                font-size: 15px;
                 flex-wrap: wrap;
+                gap: 6px;
+            }
+            .modal-teams .m-team {
+                font-size: 0.8rem;
+            }
+            .btn-predict {
+                font-size: 0.6rem;
+                padding: 7px 16px;
+                min-width: 80px;
+            }
+            .btn-stats,
+            .btn-view-predictions,
+            .btn-share {
+                font-size: 0.5rem;
+                padding: 7px 12px;
+            }
+            .win-probability {
+                padding: 6px 10px;
+                margin: 8px 0;
+            }
+            .win-probability .prob-bar {
+                height: 14px;
+            }
+            .win-probability .prob-bar .segment {
+                font-size: 0.4rem;
+            }
+            .win-probability .prob-labels {
+                font-size: 0.45rem;
+            }
+            .predictions-table {
+                font-size: 0.5rem;
+            }
+            .predictions-table th,
+            .predictions-table td {
+                padding: 3px 2px;
+                font-size: 0.45rem;
+            }
+            .predictions-stats .stat-item {
+                font-size: 0.6rem;
+                padding: 4px 10px;
+            }
+            .team-stats-grid {
+                grid-template-columns: 1fr !important;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .matches-grid {
+                grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            }
+        }
+        @media (min-width: 1024px) {
+            .matches-grid {
+                grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
             }
         }
     </style>
 </head>
-
 <body>
 
-    <h1>🏆 كأس العالم 2026 - الأدوار النهائية</h1>
+    <div class="app-container">
 
-    <div class="info">
-        <button onclick="loadGames()">🔄 تحديث الآن</button>
-        <p id="update">آخر تحديث: -</p>
-    </div>
-
-    <div id="content" class="loading">
-        جاري تحميل المباريات...
-    </div>
-
-    <!-- ===== نافذة إدخال الاسم ===== -->
-    <div class="modal-overlay" id="nameModal">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeNameModal()">✕</button>
-            <div class="modal-title">👤 أدخل اسمك</div>
-            <div style="color:#666;margin-bottom:15px;">سيتم استخدام هذا الاسم لتسجيل توقعاتك</div>
-            <div class="modal-input">
-                <input type="text" id="nameInput" placeholder="اكتب اسمك هنا..." maxlength="30">
+        <!-- ===== HEADER ===== -->
+        <div class="top-bar">
+            <img class="trophy-image" src="https://i.ibb.co/bRG2KtFw/IMG-3949.png" alt="كأس العالم 2026" />
+            <div class="overlay"></div>
+            <div class="top-bar-content">
+                <div class="top-bar-title"><span class="icon">🏆</span><span class="gold-text">كأس العالم 2026</span></div>
+                <div class="top-bar-sub"><span class="emoji">⚡</span> غرفة معلمي سعيد بن العاص</div>
             </div>
+        </div>
+
+        <header class="sticky-header">
+            <div class="brand">
+                <div><h1>🏆 الأدوار النهائية</h1><span class="sub">⚡ تابع المباريات وتوقع النتائج</span></div>
+            </div>
+            <div class="header-actions">
+                <button class="header-btn" id="themeToggleBtn" onclick="toggleTheme()">🌙 الوضع المظلم</button>
+                <button class="header-btn" onclick="clearCacheAndReload()">🗑️</button>
+                <button class="header-btn" onclick="loadGames()">🔄 تحديث</button>
+            </div>
+        </header>
+
+        <!-- ===== INFO BAR ===== -->
+        <div class="info-bar">
+            <span class="update-time" id="updateTime">آخر تحديث: جاري التحميل...</span>
+            <button class="btn-refresh" onclick="loadGames()">🔄 تحديث</button>
+        </div>
+
+        <!-- ===== CONTENT ===== -->
+        <div id="content">
+            <div class="empty-state"><span class="icon">⏳</span> جاري تحميل المباريات...</div>
+        </div>
+
+        <!-- ===== FOOTER ===== -->
+        <footer class="footer" id="footerTrigger">🏆 كأس العالم 2026 · غرفة معلمي سعيد بن العاص</footer>
+    </div>
+
+    <!-- ===== MODALS ===== -->
+    <div class="name-modal-overlay" id="nameModal">
+        <div class="name-modal-content">
+            <span class="name-icon">👤</span>
+            <div class="name-title">أدخل اسمك</div>
+            <div class="name-sub">سيتم استخدام هذا الاسم لتسجيل توقعاتك</div>
+            <input type="text" id="nameInput" placeholder="اكتب اسمك هنا..." maxlength="30" autofocus />
             <div id="nameStatus" class="user-status" style="display:none;"></div>
-            <button class="modal-submit" id="nameSubmitBtn">متابعة →</button>
-            <div id="nameError" style="color:#e74c3c;margin-top:8px;font-weight:bold;"></div>
-            <button style="margin-top:12px;font-size:14px;color:#888;background:none;border:none;cursor:pointer;" onclick="closeNameModal()">إلغاء</button>
+            <button class="name-btn" id="nameSubmitBtn">متابعة →</button>
+            <div class="name-error" id="nameError"></div>
+            <button class="name-close" id="nameCloseBtn">إلغاء</button>
         </div>
     </div>
 
-    <!-- ===== نافذة التوقع ===== -->
+    <div class="modal-overlay" id="matchPredictionsModal">
+        <div class="modal-content">
+            <button class="modal-close" id="matchPredictionsCloseBtn">✕</button>
+            <div class="modal-title">📋 توقعات المباراة</div>
+            <div class="modal-teams" id="matchPredictionsTeams">
+                <div class="m-team"><span class="flag" id="mpFlag1">🏁</span> <span id="mpTeam1">الفريق الأول</span></div>
+                <div class="m-vs">🆚</div>
+                <div class="m-team"><span class="flag" id="mpFlag2">🏁</span> <span id="mpTeam2">الفريق الثاني</span></div>
+            </div>
+            <div style="text-align:center;font-size:0.85rem;color:var(--gold-light);font-weight:700;margin:4px 0 8px;" id="mpResult">النتيجة: 0 - 0</div>
+            <div class="predictions-stats">
+                <span class="stat-item">✅ صحيح: <span class="num-correct" id="mpCorrectCount">0</span></span>
+                <span class="stat-item">❌ خاطئ: <span class="num-wrong" id="mpWrongCount">0</span></span>
+                <span class="stat-item">📊 المجموع: <span id="mpTotalCount">0</span></span>
+            </div>
+            <div id="matchPredictionsList" style="max-height:400px;overflow-y:auto;">
+                <div class="predictions-table-wrapper">
+                    <table class="predictions-table" id="predictionsTable">
+                        <thead><tr><th>المستخدم</th><th>التوقع</th><th>الحالة</th><th>الوقت</th></tr></thead>
+                        <tbody id="predictionsTableBody"><tr><td colspan="4" style="text-align:center;padding:20px;color:var(--text-secondary);">📭 لا توجد توقعات لهذه المباراة</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal-overlay" id="predictionModal">
         <div class="modal-content">
-            <button class="modal-close" onclick="closePredictionModal()">✕</button>
+            <button class="modal-close" id="modalCloseBtn">✕</button>
             <div class="modal-title">📝 توقع نتيجة المباراة</div>
-            <div style="color:#666;margin-bottom:5px;">👤 مرحباً <span id="greetingName"></span></div>
+            <div style="text-align:center;font-size:0.8rem;color:var(--text-secondary);margin-bottom:8px;" id="modalUserGreeting">👤 مرحباً <span id="greetingName"></span></div>
             <div class="modal-teams" id="modalTeams">
-                <span class="flag" id="modalFlag1">🏁</span>
-                <span class="team-name" id="modalTeam1">الفريق الأول</span>
-                <span class="vs">🆚</span>
-                <span class="flag" id="modalFlag2">🏁</span>
-                <span class="team-name" id="modalTeam2">الفريق الثاني</span>
+                <div class="m-team"><span class="flag" id="modalFlag1">🏁</span> <span id="modalTeam1">الفريق الأول</span></div>
+                <div class="m-vs">🆚</div>
+                <div class="m-team"><span class="flag" id="modalFlag2">🏁</span> <span id="modalTeam2">الفريق الثاني</span></div>
             </div>
-            <div style="font-size:13px;color:#888;margin-bottom:12px;" id="modalDateTime">📅 التاريخ والوقت</div>
-
+            <div style="text-align:center;font-size:0.75rem;color:var(--text-secondary);margin-bottom:14px;" id="modalDateTime">📅 التاريخ والوقت</div>
             <div class="modal-options" id="modalOptions">
-                <label>
-                    <input type="radio" name="prediction" value="HOME">
-                    <span class="opt-label">🏆 <span id="optTeam1">الفريق الأول</span></span>
-                    <span class="opt-sub">فوز</span>
-                </label>
-                <label>
-                    <input type="radio" name="prediction" value="AWAY">
-                    <span class="opt-label">🏆 <span id="optTeam2">الفريق الثاني</span></span>
-                    <span class="opt-sub">فوز</span>
-                </label>
+                <label><input type="radio" name="prediction" value="HOME" /><span class="opt-label">🏆 <span id="optTeam1">الفريق الأول</span></span><span class="opt-sub">فوز</span></label>
+                <label><input type="radio" name="prediction" value="AWAY" /><span class="opt-label">🏆 <span id="optTeam2">الفريق الثاني</span></span><span class="opt-sub">فوز</span></label>
             </div>
-
             <button class="modal-submit" id="modalSubmitBtn">💾 حفظ التوقع</button>
             <div class="modal-message" id="modalMessage"></div>
         </div>
     </div>
 
+    <div class="modal-overlay" id="viewPredictionsModal">
+        <div class="modal-content">
+            <button class="modal-close" id="viewModalCloseBtn">✕</button>
+            <div class="modal-title">📋 توقعات المباراة</div>
+            <div class="modal-teams" id="viewModalTeams">
+                <div class="m-team"><span class="flag" id="viewFlag1">🏁</span> <span id="viewTeam1">الفريق الأول</span></div>
+                <div class="m-vs">🆚</div>
+                <div class="m-team"><span class="flag" id="viewFlag2">🏁</span> <span id="viewTeam2">الفريق الثاني</span></div>
+            </div>
+            <div style="text-align:center;font-size:0.8rem;color:var(--text-secondary);margin:8px 0 14px;">
+                عدد التوقعات: <span id="viewPredictionsCount" style="color:var(--gold-light);font-weight:800;">0</span>
+            </div>
+            <div id="viewPredictionsList" style="max-height:400px;overflow-y:auto;">
+                <div class="empty-state"><span class="icon">📭</span> لا توجد توقعات لهذه المباراة</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="playerPredictionsModal">
+        <div class="modal-content">
+            <button class="modal-close" id="playerModalCloseBtn">✕</button>
+            <div class="modal-title">📋 جميع توقعات <span id="playerModalName"></span></div>
+            <div style="text-align:center;font-size:0.8rem;color:var(--text-secondary);margin:4px 0 12px;">
+                ✅ صحيح: <span id="playerCorrectCount" style="color:var(--success);font-weight:800;">0</span> |
+                ❌ خاطئ: <span id="playerWrongCount" style="color:var(--danger);font-weight:800;">0</span> |
+                📊 عدد التوقعات الكلي: <span id="playerTotalCount" style="color:var(--gold-light);font-weight:800;">0</span>
+            </div>
+            <div id="playerPredictionsList" style="max-height:500px;overflow-y:auto;padding:4px 0;">
+                <div class="empty-state"><span class="icon">📭</span> لا توجد توقعات لهذا اللاعب</div>
+            </div>
+        </div>
+    </div>
+
     <!-- ===== نافذة إحصائيات الفريقين ===== -->
     <div class="modal-overlay" id="teamStatsModal">
-        <div class="modal-content" style="max-width:700px;">
-            <button class="modal-close" onclick="closeTeamStatsModal()">✕</button>
+        <div class="modal-content" style="max-width:900px;">
+            <button class="modal-close" id="teamStatsCloseBtn">✕</button>
             <div class="modal-title">📊 إحصائيات الفريقين</div>
-            <div id="teamStatsContent"><div class="loading" style="font-size:16px;">⏳ جاري التحميل...</div></div>
+            <div id="teamStatsContent"><div class="empty-state"><span class="icon">⏳</span> جاري التحميل...</div></div>
         </div>
     </div>
 
-    <!-- ===== نافذة استعراض التوقعات ===== -->
-    <div class="modal-overlay" id="viewPredictionsModal">
-        <div class="modal-content" style="max-width:600px;">
-            <button class="modal-close" onclick="closeViewPredictionsModal()">✕</button>
-            <div class="modal-title">📋 توقعات المباراة</div>
-            <div class="modal-teams" id="viewTeams" style="font-size:16px;">
-                <span class="flag" id="viewFlag1">🏁</span>
-                <span class="team-name" id="viewTeam1">الفريق الأول</span>
-                <span class="vs">🆚</span>
-                <span class="flag" id="viewFlag2">🏁</span>
-                <span class="team-name" id="viewTeam2">الفريق الثاني</span>
-            </div>
-            <div style="font-size:14px;color:#666;margin:8px 0;">
-                عدد التوقعات: <span id="viewPredictionsCount" style="font-weight:bold;color:#006400;">0</span>
-            </div>
-            <div style="background:#f9f9f9;border-radius:8px;padding:12px;margin:10px 0;">
-                <div style="font-size:13px;font-weight:bold;color:#555;text-align:center;">📊 نسبة التوقعات</div>
-                <div style="display:flex;height:20px;border-radius:10px;overflow:hidden;margin:4px 0;">
-                    <div id="probHomeBar" style="background:#2ecc71;height:100%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:bold;color:white;">0%</div>
-                    <div id="probAwayBar" style="background:#e74c3c;height:100%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:bold;color:white;">0%</div>
-                </div>
-                <div style="display:flex;justify-content:space-between;font-size:12px;color:#666;">
-                    <span>🏆 <span id="probTeam1">الفريق الأول</span>: <span id="probHomePercent">0%</span></span>
-                    <span>🏆 <span id="probTeam2">الفريق الثاني</span>: <span id="probAwayPercent">0%</span></span>
-                </div>
-            </div>
-            <div class="predictions-list" id="viewPredictionsList">
-                <div style="text-align:center;padding:20px;color:#888;">📭 لا توجد توقعات لهذه المباراة</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ===== نافذة توقعات اللاعب ===== -->
-    <div class="modal-overlay" id="playerPredictionsModal">
-        <div class="modal-content" style="max-width:600px;">
-            <button class="modal-close" onclick="closePlayerPredictionsModal()">✕</button>
-            <div class="modal-title">📋 جميع توقعات <span id="playerModalName"></span></div>
-            <div style="display:flex;justify-content:center;gap:16px;margin:8px 0;font-size:14px;">
-                <span>✅ صحيح: <span id="playerCorrectCount" style="color:#2ecc71;font-weight:bold;">0</span></span>
-                <span>❌ خاطئ: <span id="playerWrongCount" style="color:#e74c3c;font-weight:bold;">0</span></span>
-                <span>📊 المجموع: <span id="playerTotalCount" style="color:#d4a745;font-weight:bold;">0</span></span>
-            </div>
-            <div class="predictions-list" id="playerPredictionsList">
-                <div style="text-align:center;padding:20px;color:#888;">📭 لا توجد توقعات لهذا اللاعب</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ===== TOAST ===== -->
-    <div class="toast" id="toast"></div>
+    <div class="copy-toast" id="copyToast">✅ تم نسخ الرابط!</div>
 
     <script>
         // ============================================================
@@ -726,9 +1471,6 @@
         // ============================================================
         const API = "https://worldcup26.ir/get/games";
 
-        // ============================================================
-        //  SUPABASE CONFIGURATION
-        // ============================================================
         const SUPABASE_URL = "https://szjxwhsmefqpfcebtvei.supabase.co";
         const SUPABASE_KEY = "sb_publishable_0um28lgPMHcjDOThT0UgDA_K-Y7Wmx3";
 
@@ -745,12 +1487,61 @@
         // ============================================================
         let allGames = [];
         let previousGamesData = [];
-        let openfootballMatches = [];
         let predictions = [];
         let userPredictionsMap = {};
         let currentUserName = '';
         let currentMatch = null;
-        let nameModalMatch = null;
+        let timerIntervals = {};
+        let timerInterval = null;
+
+        // ============================================================
+        //  THEME
+        // ============================================================
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const newTheme = current === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', newTheme === 'light' ? 'light' : '');
+            localStorage.setItem('theme', newTheme);
+            document.getElementById('themeToggleBtn').textContent = newTheme === 'light' ? '☀️ الوضع الفاتح' : '🌙 الوضع المظلم';
+        }
+        if (localStorage.getItem('theme') === 'light') {
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.getElementById('themeToggleBtn').textContent = '☀️ الوضع الفاتح';
+        }
+
+        // ============================================================
+        //  CACHE
+        // ============================================================
+        function clearCache() {
+            localStorage.removeItem("games");
+            localStorage.removeItem("predictions");
+            localStorage.removeItem("wc_cache");
+            showToast('🗑️ تم مسح الكاش');
+        }
+
+        function clearCacheAndReload() {
+            clearCache();
+            setTimeout(() => location.reload(), 400);
+        }
+
+        function setCache(key, value) {
+            try {
+                localStorage.setItem(key, JSON.stringify({ value, time: Date.now() }));
+            } catch (e) { /* ignore */ }
+        }
+
+        function getCache(key) {
+            try {
+                const raw = localStorage.getItem(key);
+                if (!raw) return null;
+                const parsed = JSON.parse(raw);
+                if (Date.now() - parsed.time > 120000) {
+                    localStorage.removeItem(key);
+                    return null;
+                }
+                return parsed.value;
+            } catch { return null; }
+        }
 
         // ============================================================
         //  TRANSLATION HELPERS
@@ -847,16 +1638,6 @@
             "پرتغال": "البرتغال",
             "پرتقال": "البرتغال",
             "Portugal": "البرتغال",
-            "جمهوری دموکراتیک کنگو": "جمهورية الكونغو الديمقراطية",
-            "کنگو دمکراتیک": "جمهورية الكونغو الديمقراطية",
-            "کنگو دموکراتیک": "جمهورية الكونغو الديمقراطية",
-            "جمهوری کنگو": "جمهورية الكونغو الديمقراطية",
-            "Democratic Republic of the Congo": "جمهورية الكونغو الديمقراطية",
-            "DR Congo": "جمهورية الكونغو الديمقراطية",
-            "Congo DR": "جمهورية الكونغو الديمقراطية",
-            "Congo (DR)": "جمهورية الكونغو الديمقراطية",
-            "Congo": "جمهورية الكونغو الديمقراطية",
-            "الكونغو": "جمهورية الكونغو الديمقراطية",
             "انگلستان": "إنجلترا",
             "England": "إنجلترا",
             "کرواسی": "كرواتيا",
@@ -883,9 +1664,6 @@
             for (let [key, value] of Object.entries(nameMapping)) {
                 if (key.toLowerCase() === lower) return value;
             }
-            if (trimmed.includes("کنگو") || trimmed.includes("الكونغو") || trimmed.toLowerCase().includes("congo")) {
-                return "جمهورية الكونغو الديمقراطية";
-            }
             return trimmed;
         }
 
@@ -898,7 +1676,6 @@
                 "النمسا": "🇦🇹",
                 "الأردن": "🇯🇴",
                 "البرتغال": "🇵🇹",
-                "جمهورية الكونغو الديمقراطية": "🇨🇩",
                 "كوريا الجنوبية": "🇰🇷",
                 "التشيك": "🇨🇿",
                 "كندا": "🇨🇦",
@@ -943,18 +1720,180 @@
             return map[name] || "🏁";
         }
 
+        function isRestrictedTeam(teamName) {
+            if (!teamName) return false;
+            const patterns = [
+                /winner\s+match\s*\d*/i,
+                /loser\s+match\s*\d*/i,
+                /winner\s+of\s+match/i,
+                /loser\s+of\s+match/i,
+                /winners?\s+match/i,
+                /losers?\s+match/i,
+                /الفائز\s*من\s*مباراة/i,
+                /الخاسر\s*من\s*مباراة/i,
+                /فائز\s*مباراة/i,
+                /خاسر\s*مباراة/i,
+                /الفائز\s*مباراة/i,
+                /الخاسر\s*مباراة/i,
+                /match\s+\d+\s*winner/i,
+                /match\s+\d+\s*loser/i,
+            ];
+            for (let pattern of patterns) {
+                if (pattern.test(teamName)) return true;
+            }
+            return false;
+        }
+
+        function isMatchRestricted(team1, team2) {
+            return isRestrictedTeam(team1) || isRestrictedTeam(team2);
+        }
+
+        function getDisplayName(teamName) {
+            if (!teamName) return teamName;
+            const winnerMatch = teamName.match(/Winner match (\d+)/i);
+            if (winnerMatch) return `🏆 الفائز من مباراة ${winnerMatch[1]}`;
+            const loserMatch = teamName.match(/Loser match (\d+)/i);
+            if (loserMatch) return `❌ الخاسر من مباراة ${loserMatch[1]}`;
+            if (teamName.toLowerCase().includes('winner match')) {
+                const num = teamName.match(/\d+/);
+                return num ? `🏆 الفائز من مباراة ${num[0]}` : '🏆 الفائز';
+            }
+            if (teamName.toLowerCase().includes('loser match')) {
+                const num = teamName.match(/\d+/);
+                return num ? `❌ الخاسر من مباراة ${num[0]}` : '❌ الخاسر';
+            }
+            return teamName;
+        }
+
         // ============================================================
-        //  CHECK FUNCTION
+        //  GET MATCH STATUS
         // ============================================================
-        function check(match, values) {
-            return values.some(v =>
-                String(match.type || "")
-                .toLowerCase()
-                .includes(v.toLowerCase()) ||
-                String(match.group || "")
-                .toLowerCase()
-                .includes(v.toLowerCase())
-            );
+        function getMatchStatus(match) {
+            if (match.finished === "TRUE" || match.finished === true) {
+                return { status: 'finished', text: '✅ انتهت', class: 'finished' };
+            }
+            if (match.status === "finished" || match.status === "Final") {
+                return { status: 'finished', text: '✅ انتهت', class: 'finished' };
+            }
+            const elapsed = match.time_elapsed || '';
+            if (elapsed && elapsed !== "-" && elapsed !== "" && !isNaN(parseInt(elapsed))) {
+                if (parseInt(elapsed) >= 90 || elapsed.includes('+')) {
+                    return { status: 'finished', text: '✅ انتهت', class: 'finished' };
+                }
+                return { status: 'live', text: '🟢 جارية', class: 'live' };
+            }
+            if (match.winner_team_id && match.winner_team_id !== null && match.winner_team_id !== "") {
+                return { status: 'finished', text: '✅ انتهت', class: 'finished' };
+            }
+            return { status: 'not-started', text: '⏳ لم تبدأ', class: 'not-started' };
+        }
+
+        // ============================================================
+        //  GET DAY NAME
+        // ============================================================
+        function getDayName(dateString) {
+            if (!dateString || dateString === "-" || dateString === "تاريخ غير معروف") return "";
+            try {
+                let date = new Date(dateString);
+                if (isNaN(date.getTime())) {
+                    const parts = dateString.match(/(\d{4})-(\d{2})-(\d{2})/);
+                    if (parts) {
+                        date = new Date(parseInt(parts[1]), parseInt(parts[2]) - 1, parseInt(parts[3]));
+                    } else {
+                        return "";
+                    }
+                }
+                if (isNaN(date.getTime())) return "";
+                const days = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+                return days[date.getDay()];
+            } catch {
+                return "";
+            }
+        }
+
+        // ============================================================
+        //  TIME HELPERS
+        // ============================================================
+        function getMatchTime(isoString) {
+            return new Date(isoString).getTime();
+        }
+
+        function getTimeRemaining(isoString) {
+            const now = Date.now();
+            const matchTime = getMatchTime(isoString);
+            const diff = matchTime - now;
+            
+            if (diff <= 0) return { expired: true, text: '⏳ ستبدأ قريباً' };
+            
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            let text = '';
+            if (days > 0) text += `${days}يوم `;
+            if (hours > 0 || days > 0) text += `${String(hours).padStart(2, '0')}:`;
+            text += `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            
+            return { expired: false, text, days, hours, minutes, seconds };
+        }
+
+        function isMatchLive(match) {
+            const status = getMatchStatus(match);
+            return status.status === 'live';
+        }
+
+        function isMatchFinished(match) {
+            const status = getMatchStatus(match);
+            return status.status === 'finished';
+        }
+
+        function canPredict(match) {
+            if (isMatchFinished(match)) return false;
+            if (isMatchLive(match)) return false;
+            const matchTime = getMatchTime(match.local_date);
+            const now = Date.now();
+            const fiveMinutes = 5 * 60 * 1000;
+            return (matchTime - now) > fiveMinutes;
+        }
+
+        // ============================================================
+        //  HIJRI DATE CONVERTER
+        // ============================================================
+        function toHijri(date) {
+            const hijriMonths = ['محرم', 'صفر', 'ربيع الأول', 'ربيع الآخر', 'جمادى الأولى', 'جمادى الآخرة', 'رجب', 'شعبان', 'رمضان', 'شوال', 'ذو القعدة', 'ذو الحجة'];
+            
+            const gDate = new Date(date);
+            const year = gDate.getFullYear();
+            const month = gDate.getMonth() + 1;
+            const day = gDate.getDate();
+            
+            // حساب التاريخ الهجري تقريبياً
+            const islamicDate = new Intl.DateTimeFormat('ar-SA-u-ca-islamic', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            }).format(gDate);
+            
+            return islamicDate;
+        }
+
+        function formatDateWithHijri(isoString) {
+            const d = new Date(isoString);
+            const gregorian = d.toLocaleDateString('ar-EG', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            
+            const hijri = toHijri(isoString);
+            
+            return `${gregorian} - ${hijri}`;
+        }
+
+        function extractTime(isoString) {
+            const d = new Date(isoString);
+            return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
         }
 
         // ============================================================
@@ -1001,16 +1940,14 @@
         }
 
         // ============================================================
-        //  TEAM STATS (تحليل الذكاء الاصطناعي)
+        //  TEAM STATS - محسنة مع إحصائيات أكثر تفصيلاً
         // ============================================================
         function getTeamStats(teamName) {
             const games = previousGamesData || [];
-            let wins = 0,
-                losses = 0,
-                draws = 0,
-                goalsFor = 0,
-                goalsAgainst = 0;
-            const results = [];
+            let wins = 0, losses = 0, draws = 0, goalsFor = 0, goalsAgainst = 0;
+            let cleanSheets = 0;
+            let matchesWithGoals = 0;
+            let totalGoals = 0;
 
             for (let game of games) {
                 let isHome = game.homeAr === teamName;
@@ -1027,45 +1964,38 @@
                 if (isHome) {
                     goalsFor += homeScore;
                     goalsAgainst += awayScore;
-                    if (winner === teamName) { wins++;
-                        results.push('W'); } else if (winner === game.awayAr) { losses++;
-                        results.push('L'); } else { draws++;
-                        results.push('D'); }
+                    if (homeScore > 0) matchesWithGoals++;
+                    if (awayScore === 0) cleanSheets++;
+                    totalGoals += homeScore;
+                    if (winner === teamName) { wins++; }
+                    else if (winner === game.awayAr) { losses++; }
+                    else { draws++; }
                 } else {
                     goalsFor += awayScore;
                     goalsAgainst += homeScore;
-                    if (winner === teamName) { wins++;
-                        results.push('W'); } else if (winner === game.homeAr) { losses++;
-                        results.push('L'); } else { draws++;
-                        results.push('D'); }
+                    if (awayScore > 0) matchesWithGoals++;
+                    if (homeScore === 0) cleanSheets++;
+                    totalGoals += awayScore;
+                    if (winner === teamName) { wins++; }
+                    else if (winner === game.homeAr) { losses++; }
+                    else { draws++; }
                 }
             }
 
             const total = wins + losses + draws;
             const winRate = total > 0 ? (wins / total) * 100 : 0;
+            const avgGoalsFor = total > 0 ? goalsFor / total : 0;
+            const avgGoalsAgainst = total > 0 ? goalsAgainst / total : 0;
+            const goalDiff = goalsFor - goalsAgainst;
 
-            return { wins, losses, draws, total, winRate, goalsFor, goalsAgainst, results };
-        }
-
-        function getTeamScorers(teamName) {
-            const scorers = {};
-            if (openfootballMatches) {
-                for (let match of openfootballMatches) {
-                    const homeTeam = translateToArabic(match.team1 || '');
-                    const awayTeam = translateToArabic(match.team2 || '');
-                    if (homeTeam !== teamName && awayTeam !== teamName) continue;
-                    const goals = [...(match.goals1 || []), ...(match.goals2 || [])];
-                    for (let g of goals) {
-                        if (!g.name) continue;
-                        if (!scorers[g.name]) scorers[g.name] = 0;
-                        scorers[g.name]++;
-                    }
-                }
-            }
-            return Object.entries(scorers)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, 5)
-                .map(([name, goals]) => ({ name, goals }));
+            return { 
+                wins, losses, draws, total, winRate, 
+                goalsFor, goalsAgainst, goalDiff,
+                avgGoalsFor: avgGoalsFor.toFixed(2),
+                avgGoalsAgainst: avgGoalsAgainst.toFixed(2),
+                cleanSheets, matchesWithGoals,
+                totalGoals
+            };
         }
 
         // ============================================================
@@ -1098,7 +2028,6 @@
                 userPredictionsMap = {};
                 if (data && data.length) {
                     data.forEach(p => { userPredictionsMap[p.match_id] = true; });
-                    console.log("✅ User predictions loaded:", data.length);
                 }
             } catch (e) {
                 console.error("❌ جلب توقعات المستخدم:", e);
@@ -1204,50 +2133,119 @@
         }
 
         // ============================================================
+        //  TEAM STATS MODAL - محسنة مع إحصائيات أكثر تفصيلاً
+        // ============================================================
+        function openTeamStatsModal(team1, team2) {
+            const modal = document.getElementById('teamStatsModal');
+            const content = document.getElementById('teamStatsContent');
+
+            const stats1 = getTeamStats(team1);
+            const stats2 = getTeamStats(team2);
+
+            content.innerHTML = `
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px;" class="team-stats-grid">
+                    <div style="background:rgba(255,255,255,0.02);border-radius:var(--radius-md);padding:16px;border:1px solid var(--border-subtle);">
+                        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;border-bottom:1px solid var(--border-gold);padding-bottom:8px;">
+                            <span style="font-size:1.5rem;">${getFlag(team1)}</span>
+                            <span style="font-weight:800;font-size:1rem;color:var(--gold-light);">${team1}</span>
+                        </div>
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:0.7rem;margin-bottom:8px;">
+                            <div><span style="color:var(--text-secondary);">🏆 فوز:</span> <strong style="color:var(--success);">${stats1.wins}</strong></div>
+                            <div><span style="color:var(--text-secondary);">❌ خسارة:</span> <strong style="color:var(--danger);">${stats1.losses}</strong></div>
+                            <div><span style="color:var(--text-secondary);">➖ تعادل:</span> <strong style="color:var(--gold-light);">${stats1.draws}</strong></div>
+                            <div><span style="color:var(--text-secondary);">📊 مباريات:</span> <strong>${stats1.total}</strong></div>
+                            <div><span style="color:var(--text-secondary);">⚽ أهداف له:</span> <strong style="color:var(--gold-light);">${stats1.goalsFor}</strong></div>
+                            <div><span style="color:var(--text-secondary);">⚽ أهداف عليه:</span> <strong style="color:var(--danger);">${stats1.goalsAgainst}</strong></div>
+                            <div><span style="color:var(--text-secondary);">📊 فارق الأهداف:</span> <strong style="color:${stats1.goalDiff >= 0 ? 'var(--success)' : 'var(--danger)'};">${stats1.goalDiff >= 0 ? '+' : ''}${stats1.goalDiff}</strong></div>
+                            <div><span style="color:var(--text-secondary);">📈 نسبة الفوز:</span> <strong style="color:var(--gold-light);">${Math.round(stats1.winRate)}%</strong></div>
+                            <div style="grid-column:1/3;"><span style="color:var(--text-secondary);">⚽ معدل الأهداف لكل مباراة:</span> <strong style="color:var(--gold-light);">${stats1.avgGoalsFor} - ${stats1.avgGoalsAgainst}</strong></div>
+                            <div style="grid-column:1/3;"><span style="color:var(--text-secondary);">🧹 شباك نظيفة:</span> <strong style="color:var(--success);">${stats1.cleanSheets} مباراة</strong></div>
+                        </div>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.02);border-radius:var(--radius-md);padding:16px;border:1px solid var(--border-subtle);">
+                        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;border-bottom:1px solid var(--border-gold);padding-bottom:8px;">
+                            <span style="font-size:1.5rem;">${getFlag(team2)}</span>
+                            <span style="font-weight:800;font-size:1rem;color:var(--gold-light);">${team2}</span>
+                        </div>
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:0.7rem;margin-bottom:8px;">
+                            <div><span style="color:var(--text-secondary);">🏆 فوز:</span> <strong style="color:var(--success);">${stats2.wins}</strong></div>
+                            <div><span style="color:var(--text-secondary);">❌ خسارة:</span> <strong style="color:var(--danger);">${stats2.losses}</strong></div>
+                            <div><span style="color:var(--text-secondary);">➖ تعادل:</span> <strong style="color:var(--gold-light);">${stats2.draws}</strong></div>
+                            <div><span style="color:var(--text-secondary);">📊 مباريات:</span> <strong>${stats2.total}</strong></div>
+                            <div><span style="color:var(--text-secondary);">⚽ أهداف له:</span> <strong style="color:var(--gold-light);">${stats2.goalsFor}</strong></div>
+                            <div><span style="color:var(--text-secondary);">⚽ أهداف عليه:</span> <strong style="color:var(--danger);">${stats2.goalsAgainst}</strong></div>
+                            <div><span style="color:var(--text-secondary);">📊 فارق الأهداف:</span> <strong style="color:${stats2.goalDiff >= 0 ? 'var(--success)' : 'var(--danger)'};">${stats2.goalDiff >= 0 ? '+' : ''}${stats2.goalDiff}</strong></div>
+                            <div><span style="color:var(--text-secondary);">📈 نسبة الفوز:</span> <strong style="color:var(--gold-light);">${Math.round(stats2.winRate)}%</strong></div>
+                            <div style="grid-column:1/3;"><span style="color:var(--text-secondary);">⚽ معدل الأهداف لكل مباراة:</span> <strong style="color:var(--gold-light);">${stats2.avgGoalsFor} - ${stats2.avgGoalsAgainst}</strong></div>
+                            <div style="grid-column:1/3;"><span style="color:var(--text-secondary);">🧹 شباك نظيفة:</span> <strong style="color:var(--success);">${stats2.cleanSheets} مباراة</strong></div>
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align:center;margin-top:16px;">
+                    <button class="btn-stats" onclick="document.getElementById('teamStatsModal').classList.remove('active');document.body.style.overflow='';" style="background:var(--gold-glow);border-color:var(--border-gold);color:var(--gold-light);">إغلاق</button>
+                </div>
+            `;
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // ============================================================
         //  TOAST
         // ============================================================
         function showToast(msg, isError = false) {
-            const t = document.getElementById('toast');
+            const t = document.getElementById('copyToast');
             t.textContent = msg;
-            t.className = 'toast show' + (isError ? ' error' : '');
-            setTimeout(() => t.classList.remove('show'), 3000);
+            t.className = 'copy-toast show' + (isError ? ' error' : '');
+            setTimeout(() => t.classList.remove('show'), 2500);
         }
+
+        // ============================================================
+        //  MATCHES DATA
+        // ============================================================
+        const matchesData = [
+            // ربع النهائي
+            { home: "فرنسا", away: "المغرب", time: "2026-07-09T23:00:00+03:00", round: "ربع النهائي", finished: false },
+            { home: "إسبانيا", away: "بلجيكا", time: "2026-07-10T22:00:00+03:00", round: "ربع النهائي", finished: false },
+            { home: "النرويج", away: "إنجلترا", time: "2026-07-12T00:00:00+03:00", round: "ربع النهائي", finished: false },
+            { home: "الأرجنتين", away: "سويسرا", time: "2026-07-12T04:00:00+03:00", round: "ربع النهائي", finished: false },
+            // نصف النهائي
+            { home: "Winner match 98", away: "Winner match 97", time: "2026-07-16T22:00:00+03:00", round: "نصف النهائي", finished: false },
+            { home: "Winner match 100", away: "Winner match 99", time: "2026-07-16T22:00:00+03:00", round: "نصف النهائي", finished: false },
+            // المركز الثالث
+            { home: "Loser match 102", away: "Loser match 102", time: "2026-07-20T00:00:00+03:00", round: "المركز الثالث", finished: false },
+            // النهائي
+            { home: "Winner match 102", away: "Winner match 101", time: "2026-07-21T22:00:00+03:00", round: "النهائي", finished: false }
+        ];
 
         // ============================================================
         //  LOAD GAMES
         // ============================================================
         async function loadGames() {
             try {
-                document.getElementById("content").innerHTML =
-                    `<div class="loading">جاري تحديث البيانات...</div>`;
-
+                // تحميل المباريات السابقة من API
                 const response = await fetch(API + "?time=" + Date.now());
                 const data = await response.json();
                 const games = Array.isArray(data) ? data : data.games;
 
-                if (!games || games.length === 0) {
-                    throw "لا توجد بيانات مباريات";
+                if (games && games.length > 0) {
+                    allGames = games;
+                    const finished = allGames.filter(g => g.finished === "TRUE");
+                    previousGamesData = finished.map(game => {
+                        const homeAr = translateToArabic(game.home_team_name_fa || game.home_team_name_en || '');
+                        const awayAr = translateToArabic(game.away_team_name_fa || game.away_team_name_en || '');
+                        const homeScore = parseInt(game.home_score, 10);
+                        const awayScore = parseInt(game.away_score, 10);
+                        let homePenalty = null, awayPenalty = null, hadPenalties = false;
+                        if (game.home_penalty_score && game.away_penalty_score) {
+                            homePenalty = parseInt(game.home_penalty_score);
+                            awayPenalty = parseInt(game.away_penalty_score);
+                            hadPenalties = true;
+                        }
+                        return { homeAr, awayAr, homeScore, awayScore, homePenalty, awayPenalty, hadPenalties };
+                    });
                 }
 
-                allGames = games;
-                const finished = allGames.filter(g => g.finished === "TRUE");
-                previousGamesData = finished.map(game => {
-                    const homeAr = translateToArabic(game.home_team_name_fa || game.home_team_name_en || '');
-                    const awayAr = translateToArabic(game.away_team_name_fa || game.away_team_name_en || '');
-                    const homeScore = parseInt(game.home_score, 10);
-                    const awayScore = parseInt(game.away_score, 10);
-                    let homePenalty = null,
-                        awayPenalty = null,
-                        hadPenalties = false;
-                    if (game.home_penalty_score && game.away_penalty_score) {
-                        homePenalty = parseInt(game.home_penalty_score);
-                        awayPenalty = parseInt(game.away_penalty_score);
-                        hadPenalties = true;
-                    }
-                    return { homeAr, awayAr, homeScore, awayScore, homePenalty, awayPenalty, hadPenalties };
-                });
-
-                // جلب التوقعات
                 await getAllPredictions();
                 const savedName = localStorage.getItem('lastUserName') || '';
                 if (savedName) {
@@ -1255,438 +2253,297 @@
                     await loadUserPredictions(savedName);
                 }
 
-                await fetchOpenfootballData();
-
-                renderGames(games);
-                document.getElementById("update").innerHTML =
+                renderMatches();
+                document.getElementById("updateTime").textContent =
                     "آخر تحديث: " + new Date().toLocaleTimeString("ar-SA");
 
             } catch (error) {
-                console.error("⚠️ فشل تحميل المباريات من API:", error);
-                renderFallbackMatches();
+                console.error("⚠️ فشل تحميل المباريات:", error);
+                renderMatches();
             }
         }
 
         // ============================================================
-        //  FETCH OPENFOOTBALL
+        //  RENDER MATCHES
         // ============================================================
-        async function fetchOpenfootballData() {
-            try {
-                const res = await fetch("https://raw.githubusercontent.com/openfootball/worldcup.json/master/2026/worldcup.json");
-                const data = await res.json();
-                openfootballMatches = data.matches || [];
-            } catch (e) {
-                console.warn("⚠️ فشل تحميل بيانات openfootball:", e);
-                openfootballMatches = [];
-            }
-        }
-
-        // ============================================================
-        //  GET MATCH STATUS (منطق المباريات القادمة والجارية)
-        // ============================================================
-        function getMatchStatus(match) {
-            // 1. التحقق من الحقل finished
-            if (match.finished === "TRUE" || match.finished === true) {
-                return { status: 'finished', text: '✅ انتهت', class: 'finished' };
-            }
-
-            // 2. التحقق من الحالة
-            if (match.status === "finished" || match.status === "Final") {
-                return { status: 'finished', text: '✅ انتهت', class: 'finished' };
-            }
-
-            // 3. التحقق من الوقت المنقضي
-            const elapsed = match.time_elapsed || '';
-            if (elapsed && elapsed !== "-" && elapsed !== "" && !isNaN(parseInt(elapsed))) {
-                if (parseInt(elapsed) >= 90 || elapsed.includes('+')) {
-                    return { status: 'finished', text: '✅ انتهت', class: 'finished' };
-                }
-                return { status: 'live', text: '🟢 جارية', class: 'live' };
-            }
-
-            // 4. التحقق من وجود winner_team_id
-            if (match.winner_team_id && match.winner_team_id !== null && match.winner_team_id !== "") {
-                return { status: 'finished', text: '✅ انتهت', class: 'finished' };
-            }
-
-            // 5. أي شيء آخر = لم تبدأ
-            return { status: 'not-started', text: '⏳ لم تبدأ', class: 'not-started' };
-        }
-
-        // ============================================================
-        //  CAN PREDICT
-        // ============================================================
-        function canPredict(match) {
-            const status = getMatchStatus(match);
-            // يمكن التوقع فقط إذا كانت المباراة لم تبدأ بعد
-            return status.status === 'not-started';
-        }
-
-        // ============================================================
-        //  RENDER GAMES
-        // ============================================================
-        function renderGames(games) {
+        function renderMatches() {
             const rounds = {
-                "ربع النهائي": m =>
-                    check(m, ["qf", "quarter", "quarter_final", "quarter-final"]),
-                "نصف النهائي": m =>
-                    check(m, ["sf", "semi", "semi_final", "semi-final"]),
-                "المركز الثالث": m =>
-                    check(m, ["3rd", "third", "third_place", "third-place"]),
-                "النهائي": m =>
-                    check(m, ["final", "championship", "winner"])
+                "ربع النهائي": [],
+                "نصف النهائي": [],
+                "المركز الثالث": [],
+                "النهائي": []
             };
+
+            matchesData.forEach(m => {
+                if (rounds[m.round]) {
+                    rounds[m.round].push(m);
+                }
+            });
 
             let html = "";
 
             for (let round in rounds) {
-                let matches = games.filter(rounds[round]);
-
-                html += `<h2>${round}</h2>`;
+                let matches = rounds[round];
 
                 if (matches.length === 0) {
                     html += `
-                        <table>
-                            <tr><td>لم يتم تحديد المباراة بعد</td></tr>
-                        </table>
+                        <div class="section-title" style="margin-top:12px;">🏆 ${round} <span class="badge-count">0</span></div>
+                        <div class="empty-state"><span class="icon">📭</span> لم يتم تحديد المباريات بعد</div>
                     `;
                     continue;
                 }
 
                 html += `
-                    <table>
-                        <tr>
-                            <th>الفريق الأول</th>
-                            <th>النتيجة</th>
-                            <th>الفريق الثاني</th>
-                            <th>التاريخ</th>
-                            <th>الحالة</th>
-                            <th>الإجراءات</th>
-                        </tr>
+                    <div class="section-title" style="margin-top:12px;">🏆 ${round} <span class="badge-count">${matches.length}</span></div>
+                    <div class="matches-grid">
                 `;
 
                 matches.forEach(match => {
-                    let homeRaw = match.home_team_name_fa ||
-                        match.home_team_name_en ||
-                        match.home_team_label ||
-                        "-";
-                    let awayRaw = match.away_team_name_fa ||
-                        match.away_team_name_en ||
-                        match.away_team_label ||
-                        "-";
+                    let homeDisplay = getDisplayName(match.home);
+                    let awayDisplay = getDisplayName(match.away);
+                    let homeFlag = getFlag(match.home);
+                    let awayFlag = getFlag(match.away);
 
-                    let home = translateToArabic(homeRaw);
-                    let away = translateToArabic(awayRaw);
-                    let homeFlag = getFlag(home);
-                    let awayFlag = getFlag(away);
+                    const restricted = isMatchRestricted(match.home, match.away);
+                    const isFinished = match.finished;
+                    const isLive = false;
 
-                    // الحصول على حالة المباراة باستخدام الدالة المحسّنة
-                    const matchStatus = getMatchStatus(match);
-                    const isFinished = matchStatus.status === 'finished';
-                    const isLive = matchStatus.status === 'live';
-                    const isNotStarted = matchStatus.status === 'not-started';
-
-                    let statusClass = matchStatus.class;
-
-                    let matchId = match.match_id || match.id || `${home}_${away}`;
-
-                    // التحقق مما إذا كان المستخدم قد توقع
+                    let matchId = `${match.home}_${match.away}`;
                     const userHasPrediction = userPredictionsMap && userPredictionsMap[matchId] === true;
 
-                    // التحقق من إمكانية التوقع
-                    const canPredictNow = canPredict(match);
-
-                    // تحليل الذكاء الاصطناعي - حساب نسب الفوز (للمباريات غير المنتهية فقط)
-                    let winProb1 = 50,
-                        winProb2 = 50;
-                    let showAI = !isFinished;
+                    // حساب نسبة الفوز المتوقعة - محسنة
+                    let winProb1 = 50, winProb2 = 50;
+                    let showAI = !isFinished && !restricted;
 
                     if (showAI) {
-                        const stats1 = getTeamStats(home);
-                        const stats2 = getTeamStats(away);
+                        const stats1 = getTeamStats(match.home);
+                        const stats2 = getTeamStats(match.away);
+                        
+                        // حساب القوة الهجومية والدفاعية
                         if (stats1.total > 0 && stats2.total > 0) {
-                            const strength1 = (stats1.goalsFor / (stats1.total || 1)) * 1.5 + (1 / ((stats1.goalsAgainst / (
-                                stats1.total || 1)) + 0.5));
-                            const strength2 = (stats2.goalsFor / (stats2.total || 1)) * 1.5 + (1 / ((stats2.goalsAgainst / (
-                                stats2.total || 1)) + 0.5));
+                            // القوة الهجومية: متوسط الأهداف المسجلة
+                            const attack1 = stats1.goalsFor / stats1.total;
+                            const attack2 = stats2.goalsFor / stats2.total;
+                            
+                            // القوة الدفاعية: متوسط الأهداف المستقبلة (كلما قل كان أفضل)
+                            const defense1 = stats1.goalsAgainst / stats1.total;
+                            const defense2 = stats2.goalsAgainst / stats2.total;
+                            
+                            // حساب القوة الكلية مع مراعاة الهجوم والدفاع
+                            const strength1 = (attack1 * 2) + (1 / (defense1 + 0.5));
+                            const strength2 = (attack2 * 2) + (1 / (defense2 + 0.5));
+                            
                             const total = strength1 + strength2;
-                            winProb1 = total > 0 ? (strength1 / total) * 100 : 50;
+                            winProb1 = total > 0 ? Math.min(85, (strength1 / total) * 100) : 50;
                             winProb2 = 100 - winProb1;
+                            
+                            // تأكد من أن النسب في نطاق معقول (15% - 85%)
+                            if (winProb1 < 15) winProb1 = 15;
+                            if (winProb2 < 15) winProb2 = 15;
+                            if (winProb1 > 85) winProb1 = 85;
+                            if (winProb2 > 85) winProb2 = 85;
+                            
+                            // إذا كانت النسب غير متوازنة، قم بتعديلها قليلاً
+                            if (Math.abs(winProb1 - winProb2) > 50) {
+                                winProb1 = 50 + (winProb1 - winProb2) * 0.3;
+                                winProb2 = 100 - winProb1;
+                            }
                         } else if (stats1.total > 0) {
-                            winProb1 = Math.min(100, Math.max(0, stats1.winRate));
+                            winProb1 = Math.min(85, Math.max(15, stats1.winRate));
                             winProb2 = 100 - winProb1;
                         } else if (stats2.total > 0) {
-                            winProb2 = Math.min(100, Math.max(0, stats2.winRate));
+                            winProb2 = Math.min(85, Math.max(15, stats2.winRate));
                             winProb1 = 100 - winProb2;
+                        }
+                        
+                        // تقريب النسب
+                        winProb1 = Math.round(winProb1);
+                        winProb2 = Math.round(winProb2);
+                    }
+
+                    let scoreDisplay;
+                    let scoreClass = 'upcoming';
+                    let matchCardClass = '';
+
+                    if (isFinished) {
+                        scoreDisplay = `<span class="match-score finished">? - ?</span>`;
+                        matchCardClass = 'finished-match';
+                    } else {
+                        scoreDisplay = `<span class="match-score upcoming">🆚</span>`;
+                    }
+
+                    // استخراج الوقت فقط (HH:MM)
+                    const timeStr = extractTime(match.time);
+                    
+                    // التاريخ الهجري والميلادي
+                    const dateStr = formatDateWithHijri(match.time);
+
+                    // حساب الوقت المتبقي
+                    let timerHtml = '';
+                    let timerClass = 'timer';
+                    let timerText = '';
+                    
+                    if (isLive) {
+                        timerText = '🔴 تُلعب الآن';
+                        timerClass += ' live';
+                    } else if (isFinished) {
+                        timerText = '✅ انتهت';
+                    } else {
+                        const remaining = getTimeRemaining(match.time);
+                        if (remaining.expired) {
+                            timerText = '⏳ ستبدأ قريباً';
+                            timerClass += ' soon';
+                        } else {
+                            timerText = `⏱️ ${remaining.text}`;
+                            const timerId = `timer_${matchId.replace(/[^a-zA-Z0-9]/g, '_')}`;
+                            timerHtml = `<span class="${timerClass}" id="${timerId}">⏱️ ${remaining.text}</span>`;
                         }
                     }
 
-                    let predictBtnHtml = '🔮 توقع';
+                    // أزرار التوقع
+                    let predictBtnHtml = 'توقع الآن';
                     let predictDisabled = false;
                     let predictClass = 'btn-predict';
 
-                    if (isFinished) {
+                    if (restricted) {
                         predictDisabled = true;
-                        predictBtnHtml = '✅ منتهية';
+                        predictBtnHtml = 'قيد الانتظار';
+                        predictClass += ' saved';
+                    } else if (isFinished) {
+                        predictDisabled = true;
+                        predictBtnHtml = 'منتهية';
                         predictClass += ' saved';
                     } else if (isLive) {
                         predictDisabled = true;
-                        predictBtnHtml = '🔴 جارية';
+                        predictBtnHtml = 'جارية';
                     } else if (userHasPrediction) {
                         predictDisabled = true;
-                        predictBtnHtml = '✅ تم التوقع';
+                        predictBtnHtml = 'تم التوقع';
                         predictClass += ' saved';
-                    } else if (!canPredictNow) {
+                    } else if (!canPredict({ local_date: match.time })) {
                         predictDisabled = true;
-                        predictBtnHtml = '⏳ قريباً';
+                        predictBtnHtml = 'قريباً';
                     }
 
-                    // تمرير الفريقين بشكل صحيح للدالة
-                    const team1 = home;
-                    const team2 = away;
-
-                    // تعديل التوقيت حسب الجولة
-                    let matchTime = match.local_date || "-";
-                    if (matchTime !== "-") {
-                        // نحاول استخراج الوقت وتعديله
-                        const timeMatch = matchTime.match(/(\d{2}):(\d{2})/);
-                        if (timeMatch) {
-                            const hour = parseInt(timeMatch[1]);
-                            const min = timeMatch[2];
-                            // تعديل التوقيت حسب المباريات المحددة
-                            if (round === "ربع النهائي") {
-                                if (home === "فرنسا" && away === "المغرب") {
-                                    matchTime = matchTime.replace(/\d{2}:\d{2}/, "23:00");
-                                } else if (home === "إسبانيا" && away === "بلجيكا") {
-                                    matchTime = matchTime.replace(/\d{2}:\d{2}/, "22:00");
-                                } else if (home === "النرويج" && away === "إنجلترا") {
-                                    matchTime = matchTime.replace(/\d{2}:\d{2}/, "00:00");
-                                } else if (home === "الأرجنتين" && away.includes("Winner match 96")) {
-                                    matchTime = matchTime.replace(/\d{2}:\d{2}/, "04:00");
-                                }
-                            } else if (round === "نصف النهائي") {
-                                matchTime = matchTime.replace(/\d{2}:\d{2}/, "22:00");
-                            } else if (round === "المركز الثالث") {
-                                matchTime = matchTime.replace(/\d{2}:\d{2}/, "00:00");
-                            } else if (round === "النهائي") {
-                                matchTime = matchTime.replace(/\d{2}:\d{2}/, "22:00");
-                            }
-                        }
-                    }
-
+                    // بناء البطاقة
                     html += `
-                        <tr>
-                            <td>
-                                <span class="flag-icon">${homeFlag}</span>
-                                ${home}
-                            </td>
-                            <td class="score">
-                                ${match.home_score ?? "-"}
-                                -
-                                ${match.away_score ?? "-"}
-                                ${match.home_penalty_score && match.away_penalty_score ? `<br><small style="font-size:12px;color:#d4a745;">⚽ ترجيح: ${match.home_penalty_score} - ${match.away_penalty_score}</small>` : ''}
-                            </td>
-                            <td>
-                                <span class="flag-icon">${awayFlag}</span>
-                                ${away}
-                            </td>
-                            <td>${matchTime}</td>
-                            <td><span class="status-badge ${statusClass}">${matchStatus.text}</span></td>
-                            <td>
-                                <button class="${predictClass}" onclick="openNameModal('${matchId}','${team1}','${team2}','${matchTime}')" ${predictDisabled ? 'disabled' : ''}>
-                                    ${predictBtnHtml}
-                                </button>
-                                <button class="btn-stats" onclick="openTeamStatsModal('${home}','${away}')">📊 إحصائيات</button>
-                                <button class="btn-view-predictions" onclick="openViewPredictionsModal('${matchId}','${home}','${away}')">📋 توقعات</button>
-                            </td>
-                        </tr>
-                        ${!isFinished ? `
-                        <tr>
-                            <td colspan="6" style="background:#f9f9f9;padding:6px;">
-                                <div class="win-prob">
-                                    🤖 تحليل الذكاء الاصطناعي: 
-                                    <span style="font-weight:bold;color:#2ecc71;">${Math.round(winProb1)}%</span>
-                                    <span class="bar home" style="width:${Math.round(winProb1)}%;max-width:200px;min-width:10px;"></span>
-                                    🆚
-                                    <span class="bar away" style="width:${Math.round(winProb2)}%;max-width:200px;min-width:10px;"></span>
-                                    <span style="font-weight:bold;color:#e74c3c;">${Math.round(winProb2)}%</span>
-                                    <span style="font-size:11px;color:#888;"> (بناءً على إحصائيات الفريقين)</span>
+                        <div class="match-card ${matchCardClass}">
+                            <div class="match-teams">
+                                <div class="match-team"><span class="flag">${homeFlag}</span> ${homeDisplay}</div>
+                                ${scoreDisplay}
+                                <div class="match-team"><span class="flag">${awayFlag}</span> ${awayDisplay}</div>
+                            </div>
+                            <div class="match-meta">
+                                <span class="tag">${round}</span>
+                                <span class="tag ${isFinished ? 'finished-tag' : ''}">${isFinished ? '✅ انتهت' : '⏳ لم تبدأ'}</span>
+                            </div>
+                            <div class="match-meta" style="margin-top:4px;flex-wrap:wrap;">
+                                <span class="tag">🕐 ${timeStr}</span>
+                                <span class="tag" style="font-size:0.5rem;">${dateStr}</span>
+                                ${timerHtml || `<span class="${timerClass}">${timerText}</span>`}
+                            </div>
+
+                            ${!isFinished && !restricted ? `
+                            <div class="win-probability">
+                                <div class="prob-title">📊 نسبة الفوز المتوقعة وفقاً لتحليل الذكاء الاصطناعي</div>
+                                <div class="prob-bar">
+                                    <div class="segment home" style="width:${winProb1}%;">${winProb1}%</div>
+                                    <div class="segment away" style="width:${winProb2}%;">${winProb2}%</div>
                                 </div>
-                            </td>
-                        </tr>
-                        ` : ''}
+                                <div class="prob-labels">
+                                    <span class="label"><span class="dot home"></span> ${homeDisplay}</span>
+                                    <span class="label"><span class="dot away"></span> ${awayDisplay}</span>
+                                </div>
+                            </div>
+                            ` : ''}
+
+                            ${restricted && !isFinished ? `
+                            <div class="restricted-message">
+                                ⏳ هذه المباراة تعتمد على نتيجة مباراة سابقة. ستتوفر التوقعات والإحصائيات بعد تحديد الفريقين المتأهلين.
+                            </div>
+                            ` : ''}
+
+                            <div class="match-actions">
+                                ${!restricted ? `<button class="${predictClass}" onclick="openNameModal('${matchId}','${match.home}','${match.away}','${match.time}')" ${predictDisabled ? 'disabled' : ''}>
+                                    ${predictBtnHtml}
+                                </button>` : `<button class="btn-predict saved" disabled>قيد الانتظار</button>`}
+                                ${!restricted ? `<button class="btn-stats" onclick="openTeamStatsModal('${match.home}','${match.away}')">📊 إحصائيات</button>` : ''}
+                                <button class="btn-view-predictions" onclick="openViewPredictionsModal('${matchId}','${match.home}','${match.away}')">📋 توقعات</button>
+                                <button class="btn-share" onclick="copyMatchLink('${matchId}','${match.home}','${match.away}')">🔗</button>
+                            </div>
+                        </div>
                     `;
                 });
 
-                html += `</table>`;
+                html += `
+                    </div>
+                `;
             }
 
             document.getElementById("content").innerHTML = html;
+
+            // بدء العدادات التنازلية
+            startTimers();
         }
 
         // ============================================================
-        //  RENDER FALLBACK MATCHES (مع منطق المباريات القادمة والجارية)
+        //  START TIMERS - محسنة لتشغيل سلس
         // ============================================================
-        function renderFallbackMatches() {
-            // نحدد بعض المباريات كـ "لم تبدأ" لتظهر زر التوقع
-            const fallbackMatches = [
-                { home: "البرازيل", away: "الأرجنتين", homeScore: "-", awayScore: "-", date: "2026-07-15 22:00",
-                    status: "لم تبدأ", round: "ربع النهائي", finished: false, time_elapsed: "-" },
-                { home: "فرنسا", away: "المغرب", homeScore: 3, awayScore: 0, date: "2026-07-09 23:00",
-                    status: "انتهت", round: "ربع النهائي", finished: true, time_elapsed: "90" },
-                { home: "إنجلترا", away: "هولندا", homeScore: 1, awayScore: 1, homePenalty: 5, awayPenalty: 4,
-                    date: "2026-07-10 01:00", status: "انتهت (ركلات ترجيح)", round: "ربع النهائي", finished: true,
-                    time_elapsed: "90" },
-                { home: "البرتغال", away: "إسبانيا", homeScore: 0, awayScore: 2, date: "2026-07-10 04:00",
-                    status: "انتهت", round: "ربع النهائي", finished: true, time_elapsed: "90" },
-                { home: "البرازيل", away: "فرنسا", homeScore: 2, awayScore: 3, date: "2026-07-13 22:00",
-                    status: "انتهت", round: "نصف النهائي", finished: true, time_elapsed: "90" },
-                { home: "إنجلترا", away: "إسبانيا", homeScore: "-", awayScore: "-", date: "2026-07-16 22:00",
-                    status: "لم تبدأ", round: "نصف النهائي", finished: false, time_elapsed: "-" },
-                { home: "البرازيل", away: "إنجلترا", homeScore: "-", awayScore: "-", date: "2026-07-20 00:00",
-                    status: "لم تبدأ", round: "المركز الثالث", finished: false, time_elapsed: "-" },
-                { home: "فرنسا", away: "إسبانيا", homeScore: "-", awayScore: "-", date: "2026-07-21 22:00",
-                    status: "لم تبدأ", round: "النهائي", finished: false, time_elapsed: "-" }
-            ];
-
-            const rounds = {
-                "ربع النهائي": 4,
-                "نصف النهائي": 2,
-                "المركز الثالث": 1,
-                "النهائي": 1
-            };
-
-            let html = "";
-            let matchIndex = 0;
-
-            for (let [round, count] of Object.entries(rounds)) {
-                html += `<h2>${round}</h2>`;
-                const roundMatches = fallbackMatches.slice(matchIndex, matchIndex + count);
-                matchIndex += count;
-
-                html += `
-                    <table>
-                        <tr>
-                            <th>الفريق الأول</th>
-                            <th>النتيجة</th>
-                            <th>الفريق الثاني</th>
-                            <th>التاريخ</th>
-                            <th>الحالة</th>
-                            <th>الإجراءات</th>
-                        </tr>
-                `;
-
-                roundMatches.forEach(m => {
-                    let homeFlag = getFlag(m.home);
-                    let awayFlag = getFlag(m.away);
-
-                    // تحديد حالة المباراة باستخدام الدالة المحسّنة
-                    const matchObj = {
-                        finished: m.finished,
-                        time_elapsed: m.time_elapsed,
-                        status: m.finished ? "finished" : "not-started"
-                    };
-                    const matchStatus = getMatchStatus(matchObj);
-                    const isFinished = matchStatus.status === 'finished';
-                    const isNotStarted = matchStatus.status === 'not-started';
-
-                    let statusClass = matchStatus.class;
-
-                    let scoreDisplay = `${m.homeScore} - ${m.awayScore}`;
-                    if (m.homePenalty !== undefined && m.awayPenalty !== undefined) {
-                        scoreDisplay += `<br><small style="font-size:12px;color:#d4a745;">⚽ ترجيح: ${m.homePenalty} - ${m.awayPenalty}</small>`;
-                    }
-
-                    let matchId = `${m.home}_${m.away}`;
-
-                    // التحقق مما إذا كان المستخدم قد توقع
-                    const userHasPrediction = userPredictionsMap && userPredictionsMap[matchId] === true;
-
-                    let predictBtnHtml = '🔮 توقع';
-                    let predictDisabled = false;
-                    let predictClass = 'btn-predict';
-
-                    if (isFinished) {
-                        predictDisabled = true;
-                        predictBtnHtml = '✅ منتهية';
-                        predictClass += ' saved';
-                    } else if (userHasPrediction) {
-                        predictDisabled = true;
-                        predictBtnHtml = '✅ تم التوقع';
-                        predictClass += ' saved';
-                    }
-
-                    // تحليل الذكاء الاصطناعي للمباريات غير المنتهية
-                    let winProb1 = 50,
-                        winProb2 = 50;
-                    let showAI = !isFinished;
-                    if (showAI) {
-                        const stats1 = getTeamStats(m.home);
-                        const stats2 = getTeamStats(m.away);
-                        if (stats1.total > 0 && stats2.total > 0) {
-                            const strength1 = (stats1.goalsFor / (stats1.total || 1)) * 1.5 + (1 / ((stats1.goalsAgainst / (
-                                stats1.total || 1)) + 0.5));
-                            const strength2 = (stats2.goalsFor / (stats2.total || 1)) * 1.5 + (1 / ((stats2.goalsAgainst / (
-                                stats2.total || 1)) + 0.5));
-                            const total = strength1 + strength2;
-                            winProb1 = total > 0 ? (strength1 / total) * 100 : 50;
-                            winProb2 = 100 - winProb1;
-                        } else if (stats1.total > 0) {
-                            winProb1 = Math.min(100, Math.max(0, stats1.winRate));
-                            winProb2 = 100 - winProb1;
-                        } else if (stats2.total > 0) {
-                            winProb2 = Math.min(100, Math.max(0, stats2.winRate));
-                            winProb1 = 100 - winProb2;
-                        }
-                    }
-
-                    html += `
-                        <tr>
-                            <td><span class="flag-icon">${homeFlag}</span> ${m.home}</td>
-                            <td class="score">${scoreDisplay}</td>
-                            <td><span class="flag-icon">${awayFlag}</span> ${m.away}</td>
-                            <td>${m.date}</td>
-                            <td><span class="status-badge ${statusClass}">${matchStatus.text}</span></td>
-                            <td>
-                                ${isNotStarted ? `<button class="${predictClass}" onclick="openNameModal('${matchId}','${m.home}','${m.away}','${m.date}')" ${predictDisabled ? 'disabled' : ''}>
-                                    ${predictBtnHtml}
-                                </button>` : ''}
-                                <button class="btn-stats" onclick="openTeamStatsModal('${m.home}','${m.away}')">📊 إحصائيات</button>
-                                <button class="btn-view-predictions" onclick="openViewPredictionsModal('${matchId}','${m.home}','${m.away}')">📋 توقعات</button>
-                            </td>
-                        </tr>
-                        ${!isFinished ? `
-                        <tr>
-                            <td colspan="6" style="background:#f9f9f9;padding:6px;">
-                                <div class="win-prob">
-                                    🤖 تحليل الذكاء الاصطناعي: 
-                                    <span style="font-weight:bold;color:#2ecc71;">${Math.round(winProb1)}%</span>
-                                    <span class="bar home" style="width:${Math.round(winProb1)}%;max-width:200px;min-width:10px;"></span>
-                                    🆚
-                                    <span class="bar away" style="width:${Math.round(winProb2)}%;max-width:200px;min-width:10px;"></span>
-                                    <span style="font-weight:bold;color:#e74c3c;">${Math.round(winProb2)}%</span>
-                                    <span style="font-size:11px;color:#888;"> (بناءً على إحصائيات الفريقين)</span>
-                                </div>
-                            </td>
-                        </tr>
-                        ` : ''}
-                    `;
-                });
-
-                html += `</table>`;
+        function startTimers() {
+            // إيقاف جميع العدادات القديمة
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+            
+            for (let key in timerIntervals) {
+                clearInterval(timerIntervals[key]);
+                delete timerIntervals[key];
             }
 
-            document.getElementById("content").innerHTML = html;
-            document.getElementById("update").innerHTML =
-                "آخر تحديث: " + new Date().toLocaleTimeString("ar-SA") + " (بيانات تجريبية)";
+            // تحديث جميع العدادات مرة واحدة كل ثانية
+            timerInterval = setInterval(() => {
+                const timerElements = document.querySelectorAll('[id^="timer_"]');
+                
+                timerElements.forEach(el => {
+                    const matchId = el.id.replace('timer_', '');
+                    // البحث عن وقت المباراة من البيانات
+                    let matchTime = '';
+                    for (let m of matchesData) {
+                        if (`${m.home}_${m.away}` === matchId) {
+                            matchTime = m.time;
+                            break;
+                        }
+                    }
+                    
+                    if (!matchTime) return;
+                    
+                    const remaining = getTimeRemaining(matchTime);
+                    if (remaining.expired) {
+                        el.textContent = '⏳ ستبدأ قريباً';
+                        el.className = 'timer soon';
+                    } else {
+                        el.textContent = `⏱️ ${remaining.text}`;
+                    }
+                });
+            }, 1000);
         }
 
         // ============================================================
         //  NAME MODAL
         // ============================================================
+        let nameModalMatchId = '', nameModalTeam1 = '', nameModalTeam2 = '', nameModalTimeISO = '';
+
         function openNameModal(matchId, team1, team2, date) {
-            console.log("📌 فتح نافذة الاسم:", matchId, team1, team2, date);
-            nameModalMatch = { matchId, team1, team2, date };
+            if (isMatchRestricted(team1, team2)) {
+                showToast('⚠️ هذه المباراة غير متاحة للتوقع', true);
+                return;
+            }
+
+            nameModalMatchId = matchId;
+            nameModalTeam1 = team1;
+            nameModalTeam2 = team2;
+            nameModalTimeISO = date;
 
             document.getElementById('nameInput').value = localStorage.getItem('lastUserName') || '';
             document.getElementById('nameStatus').style.display = 'none';
@@ -1704,6 +2561,9 @@
             document.body.style.overflow = '';
         }
 
+        document.getElementById('nameCloseBtn').addEventListener('click', closeNameModal);
+        document.getElementById('nameModal').addEventListener('click', function(e) { if (e.target === this) closeNameModal(); });
+
         document.getElementById('nameSubmitBtn').addEventListener('click', async function() {
             const name = document.getElementById('nameInput').value.trim();
             const errorEl = document.getElementById('nameError');
@@ -1713,6 +2573,11 @@
 
             if (!supabaseClient) {
                 errorEl.textContent = '❌ خطأ في الاتصال بقاعدة البيانات';
+                return;
+            }
+
+            if (isMatchRestricted(nameModalTeam1, nameModalTeam2)) {
+                errorEl.textContent = '⚠️ هذه المباراة غير متاحة للتوقع';
                 return;
             }
 
@@ -1738,7 +2603,7 @@
                     localStorage.setItem('lastUserName', name);
                     currentUserName = name;
 
-                    const existingPred = await getUserPrediction(name, nameModalMatch.matchId);
+                    const existingPred = await getUserPrediction(name, nameModalMatchId);
                     if (existingPred) {
                         errorEl.textContent = `⚠️ لقد توقعت هذه المباراة مسبقاً`;
                         this.disabled = false;
@@ -1750,8 +2615,7 @@
                     this.textContent = '✅ متابعة للتوقع';
                     setTimeout(() => {
                         closeNameModal();
-                        openPredictionModal(nameModalMatch.matchId, nameModalMatch.team1, nameModalMatch.team2,
-                            nameModalMatch.date, name);
+                        openPredictionModal(nameModalMatchId, nameModalTeam1, nameModalTeam2, nameModalTimeISO, name);
                     }, 600);
                 } else {
                     statusEl.className = 'user-status new';
@@ -1763,8 +2627,7 @@
                     this.textContent = '✅ متابعة للتوقع';
                     setTimeout(() => {
                         closeNameModal();
-                        openPredictionModal(nameModalMatch.matchId, nameModalMatch.team1, nameModalMatch.team2,
-                            nameModalMatch.date, name);
+                        openPredictionModal(nameModalMatchId, nameModalTeam1, nameModalTeam2, nameModalTimeISO, name);
                     }, 600);
                 }
             } catch (e) {
@@ -1782,15 +2645,19 @@
         });
 
         // ============================================================
-        //  PREDICTION MODAL - تم إصلاح عرض الفريقين
+        //  PREDICTION MODAL
         // ============================================================
         function openPredictionModal(matchId, team1, team2, date, userName) {
-            console.log("📌 فتح نافذة التوقع:", matchId, team1, team2, date);
+            if (isMatchRestricted(team1, team2)) {
+                showToast('⚠️ هذه المباراة غير متاحة للتوقع', true);
+                return;
+            }
+
             currentMatch = { matchId, team1, team2, date };
             currentUserName = userName || localStorage.getItem('lastUserName') || '';
 
-            // عرض الفريقين في المودال
             document.getElementById('greetingName').textContent = currentUserName;
+            document.getElementById('modalUserGreeting').style.display = 'block';
             document.getElementById('modalTeam1').textContent = team1;
             document.getElementById('modalTeam2').textContent = team2;
             document.getElementById('optTeam1').textContent = team1;
@@ -1799,25 +2666,25 @@
             document.getElementById('modalFlag2').textContent = getFlag(team2);
             document.getElementById('modalDateTime').textContent = `📅 ${date || 'تاريخ غير معروف'}`;
 
-            // إلغاء تحديد أي خيار سابق
             document.querySelectorAll('input[name="prediction"]').forEach(el => el.checked = false);
 
-            // إظهار المودال
-            document.getElementById('predictionModal').classList.add('active');
-            document.body.style.overflow = 'hidden';
-
-            // إعادة تعيين الرسالة
             const msgEl = document.getElementById('modalMessage');
             msgEl.textContent = '';
             msgEl.className = 'modal-message';
             document.getElementById('modalSubmitBtn').disabled = false;
             document.getElementById('modalSubmitBtn').textContent = '💾 حفظ التوقع';
+
+            document.getElementById('predictionModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
         }
 
         function closePredictionModal() {
             document.getElementById('predictionModal').classList.remove('active');
             document.body.style.overflow = '';
         }
+
+        document.getElementById('modalCloseBtn').addEventListener('click', closePredictionModal);
+        document.getElementById('predictionModal').addEventListener('click', function(e) { if (e.target === this) closePredictionModal(); });
 
         document.getElementById('modalSubmitBtn').addEventListener('click', async function() {
             const userName = currentUserName || localStorage.getItem('lastUserName') || '';
@@ -1868,69 +2735,6 @@
         });
 
         // ============================================================
-        //  TEAM STATS MODAL
-        // ============================================================
-        function openTeamStatsModal(team1, team2) {
-            const modal = document.getElementById('teamStatsModal');
-            const content = document.getElementById('teamStatsContent');
-
-            const stats1 = getTeamStats(team1);
-            const stats2 = getTeamStats(team2);
-            const scorers1 = getTeamScorers(team1);
-            const scorers2 = getTeamScorers(team2);
-
-            const getResultSymbol = (r) => r === 'W' ? '✅' : r === 'L' ? '❌' : '➖';
-            const streak1 = (stats1.results || []).slice(-10).map(r => getResultSymbol(r)).join('') || 'لا توجد مباريات سابقة';
-            const streak2 = (stats2.results || []).slice(-10).map(r => getResultSymbol(r)).join('') || 'لا توجد مباريات سابقة';
-
-            content.innerHTML = `
-                <div class="stats-grid">
-                    <div class="team-stats">
-                        <div class="team-name">${getFlag(team1)} ${team1}</div>
-                        <div class="stat-row"><span class="label">🏆 فوز</span><span class="value green">${stats1.wins}</span></div>
-                        <div class="stat-row"><span class="label">❌ خسارة</span><span class="value red">${stats1.losses}</span></div>
-                        <div class="stat-row"><span class="label">➖ تعادل</span><span class="value gold">${stats1.draws}</span></div>
-                        <div class="stat-row"><span class="label">📊 مباريات</span><span class="value">${stats1.total}</span></div>
-                        <div class="stat-row"><span class="label">⚽ أهداف له</span><span class="value gold">${stats1.goalsFor}</span></div>
-                        <div class="stat-row"><span class="label">⚽ أهداف عليه</span><span class="value red">${stats1.goalsAgainst}</span></div>
-                        <div class="stat-row"><span class="label">📈 نسبة الفوز</span><span class="value gold">${Math.round(stats1.winRate)}%</span></div>
-                        <div class="streak">${streak1}</div>
-                        <div class="scorers">
-                            <strong>⚽ الهدافون:</strong>
-                            ${scorers1.length ? scorers1.map(s => `<span class="scorer">${s.name} <span class="goals">${s.goals}</span></span>`).join('') : 'لا توجد أهداف مسجلة'}
-                        </div>
-                    </div>
-                    <div class="team-stats">
-                        <div class="team-name">${getFlag(team2)} ${team2}</div>
-                        <div class="stat-row"><span class="label">🏆 فوز</span><span class="value green">${stats2.wins}</span></div>
-                        <div class="stat-row"><span class="label">❌ خسارة</span><span class="value red">${stats2.losses}</span></div>
-                        <div class="stat-row"><span class="label">➖ تعادل</span><span class="value gold">${stats2.draws}</span></div>
-                        <div class="stat-row"><span class="label">📊 مباريات</span><span class="value">${stats2.total}</span></div>
-                        <div class="stat-row"><span class="label">⚽ أهداف له</span><span class="value gold">${stats2.goalsFor}</span></div>
-                        <div class="stat-row"><span class="label">⚽ أهداف عليه</span><span class="value red">${stats2.goalsAgainst}</span></div>
-                        <div class="stat-row"><span class="label">📈 نسبة الفوز</span><span class="value gold">${Math.round(stats2.winRate)}%</span></div>
-                        <div class="streak">${streak2}</div>
-                        <div class="scorers">
-                            <strong>⚽ الهدافون:</strong>
-                            ${scorers2.length ? scorers2.map(s => `<span class="scorer">${s.name} <span class="goals">${s.goals}</span></span>`).join('') : 'لا توجد أهداف مسجلة'}
-                        </div>
-                    </div>
-                </div>
-                <div style="text-align:center;margin-top:16px;">
-                    <button onclick="closeTeamStatsModal()" style="background:#006400;color:white;border:none;padding:8px 24px;border-radius:6px;cursor:pointer;font-size:14px;">إغلاق</button>
-                </div>
-            `;
-
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeTeamStatsModal() {
-            document.getElementById('teamStatsModal').classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        // ============================================================
         //  VIEW PREDICTIONS MODAL
         // ============================================================
         async function openViewPredictionsModal(matchId, team1, team2) {
@@ -1938,45 +2742,19 @@
             document.getElementById('viewTeam2').textContent = team2;
             document.getElementById('viewFlag1').textContent = getFlag(team1);
             document.getElementById('viewFlag2').textContent = getFlag(team2);
-            document.getElementById('probTeam1').textContent = team1;
-            document.getElementById('probTeam2').textContent = team2;
 
             const listContainer = document.getElementById('viewPredictionsList');
             const countSpan = document.getElementById('viewPredictionsCount');
 
-            listContainer.innerHTML = `<div style="text-align:center;padding:20px;color:#888;">⏳ جاري التحميل...</div>`;
+            listContainer.innerHTML = `<div class="empty-state"><span class="icon">⏳</span> جاري التحميل...</div>`;
             countSpan.textContent = '...';
 
             const predictionsList = await getPredictionsForMatch(matchId);
             countSpan.textContent = predictionsList.length;
 
-            let homeCount = 0,
-                awayCount = 0;
-            for (let p of predictionsList) {
-                if (p.prediction === team1) homeCount++;
-                else if (p.prediction === team2) awayCount++;
-            }
-            const total = predictionsList.length;
-            const homePercent = total > 0 ? (homeCount / total) * 100 : 0;
-            const awayPercent = total > 0 ? (awayCount / total) * 100 : 0;
-
-            document.getElementById('probHomePercent').textContent = homePercent.toFixed(1) + '%';
-            document.getElementById('probAwayPercent').textContent = awayPercent.toFixed(1) + '%';
-            document.getElementById('probHomeBar').style.width = Math.max(homePercent, 5) + '%';
-            document.getElementById('probHomeBar').textContent = homePercent.toFixed(0) + '%';
-            document.getElementById('probAwayBar').style.width = Math.max(awayPercent, 5) + '%';
-            document.getElementById('probAwayBar').textContent = awayPercent.toFixed(0) + '%';
-
-            if (total === 0) {
-                document.getElementById('probHomeBar').style.width = '50%';
-                document.getElementById('probHomeBar').textContent = '0%';
-                document.getElementById('probAwayBar').style.width = '50%';
-                document.getElementById('probAwayBar').textContent = '0%';
-            }
-
             if (!predictionsList || predictionsList.length === 0) {
                 listContainer.innerHTML =
-                    `<div style="text-align:center;padding:20px;color:#888;">📭 لا توجد توقعات لهذه المباراة</div>`;
+                    `<div class="empty-state"><span class="icon">📭</span> لا توجد توقعات لهذه المباراة</div>`;
             } else {
                 let html = '';
                 predictionsList.forEach(p => {
@@ -1989,15 +2767,14 @@
                         statusText = '❌ خاطئ'; }
 
                     html += `
-                        <div class="prediction-item">
-                            <div>
-                                <span class="user" onclick="openPlayerPredictions('${p.user_name || ''}')">${p.user_name || 'مجهول'}</span>
-                                <span style="color:#888;font-size:12px;">🕒 ${p.created_at ? new Date(p.created_at).toLocaleDateString('ar-SA') : ''}</span>
+                        <div class="prediction-card ${statusClass}" onclick="openPlayerPredictions('${p.user_name || ''}')" style="cursor:pointer;">
+                            <div class="user">
+                                <div class="avatar-p">${p.user_name ? p.user_name.charAt(0).toUpperCase() : '👤'}</div>
+                                <span class="name-p">${p.user_name || 'مجهول'}</span>
                             </div>
-                            <div>
-                                <span class="pred ${status.status === 'correct' ? 'correct' : status.status === 'wrong' ? 'wrong' : ''}">${predText}</span>
-                                <span class="status ${statusClass}">${statusText}</span>
-                            </div>
+                            <div class="prediction-text">🔮 ${predText}</div>
+                            <span class="status-badge ${statusClass}">${statusText}</span>
+                            <div style="font-size:0.6rem;color:var(--text-secondary);margin-top:4px;">🕒 ${p.created_at ? new Date(p.created_at).toLocaleDateString('ar-SA') : 'تاريخ غير معروف'}</div>
                         </div>
                     `;
                 });
@@ -2013,6 +2790,94 @@
             document.body.style.overflow = '';
         }
 
+        document.getElementById('viewModalCloseBtn').addEventListener('click', closeViewPredictionsModal);
+        document.getElementById('viewPredictionsModal').addEventListener('click', function(e) { if (e.target === this) closeViewPredictionsModal(); });
+
+        // ============================================================
+        //  MATCH PREDICTIONS MODAL
+        // ============================================================
+        async function openMatchPredictions(matchId, team1, team2, homeScore, awayScore) {
+            document.getElementById('mpTeam1').textContent = team1;
+            document.getElementById('mpTeam2').textContent = team2;
+            document.getElementById('mpFlag1').textContent = getFlag(team1);
+            document.getElementById('mpFlag2').textContent = getFlag(team2);
+
+            let result = findMatchResult(team1, team2);
+            let penaltyText = '';
+            if (result) {
+                homeScore = result.homeScore;
+                awayScore = result.awayScore;
+                let displayScore = `${homeScore} - ${awayScore}`;
+                if (result.hadPenalties && result.homePenalty !== null && result.awayPenalty !== null) {
+                    penaltyText = ` ⚽ ركلات ترجيح: ${result.homePenalty} — ${result.awayPenalty}`;
+                }
+                document.getElementById('mpResult').textContent = `النتيجة: ${displayScore}${penaltyText}`;
+            } else {
+                document.getElementById('mpResult').textContent = `⚠️ لم يتم العثور على نتيجة هذه المباراة بعد`;
+            }
+
+            const correctSpan = document.getElementById('mpCorrectCount');
+            const wrongSpan = document.getElementById('mpWrongCount');
+            const totalSpan = document.getElementById('mpTotalCount');
+            const tbody = document.getElementById('predictionsTableBody');
+            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--text-secondary);">⏳ جاري التحميل...</td></tr>`;
+            correctSpan.textContent = '...';
+            wrongSpan.textContent = '...';
+            totalSpan.textContent = '...';
+
+            const predictionsList = await getPredictionsForMatch(matchId);
+            totalSpan.textContent = predictionsList.length;
+
+            if (predictionsList.length === 0) {
+                tbody.innerHTML =
+                    `<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--text-secondary);">📭 لا توجد توقعات لهذه المباراة</td></tr>`;
+                correctSpan.textContent = '0';
+                wrongSpan.textContent = '0';
+                document.getElementById('matchPredictionsModal').classList.add('active');
+                document.body.style.overflow = 'hidden';
+                return;
+            }
+
+            let correctCount = 0, wrongCount = 0;
+            let rows = '';
+
+            predictionsList.forEach(p => {
+                const status = getPredictionStatus(p);
+                let predText = p.prediction === 'DRAW' ? 'تعادل' : `فوز ${p.prediction}`;
+                const isCorrect = status.status === 'correct';
+                if (isCorrect) correctCount++;
+                else wrongCount++;
+
+                const statusText = isCorrect ? 'صحيح' : 'خاطئ';
+                const statusClass = isCorrect ? 'status-correct' : 'status-wrong';
+                const predClass = isCorrect ? 'correct' : 'wrong';
+
+                rows += `
+                    <tr>
+                        <td class="user-name" onclick="openPlayerPredictions('${p.user_name || ''}')">${p.user_name || 'مجهول'}</td>
+                        <td class="prediction-text ${predClass}">${predText}</td>
+                        <td class="${statusClass}">${statusText}</td>
+                        <td class="time-cell">${p.created_at ? new Date(p.created_at).toLocaleDateString('ar-SA') : 'تاريخ غير معروف'}</td>
+                    </tr>
+                `;
+            });
+
+            correctSpan.textContent = correctCount;
+            wrongSpan.textContent = wrongCount;
+            tbody.innerHTML = rows;
+
+            document.getElementById('matchPredictionsModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMatchPredictionsModal() {
+            document.getElementById('matchPredictionsModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        document.getElementById('matchPredictionsCloseBtn').addEventListener('click', closeMatchPredictionsModal);
+        document.getElementById('matchPredictionsModal').addEventListener('click', function(e) { if (e.target === this) closeMatchPredictionsModal(); });
+
         // ============================================================
         //  PLAYER PREDICTIONS MODAL
         // ============================================================
@@ -2025,14 +2890,13 @@
             const wrongSpan = document.getElementById('playerWrongCount');
             const totalSpan = document.getElementById('playerTotalCount');
 
-            listContainer.innerHTML = `<div style="text-align:center;padding:20px;color:#888;">⏳ جاري التحميل...</div>`;
+            listContainer.innerHTML = `<div class="empty-state"><span class="icon">⏳</span> جاري التحميل...</div>`;
             correctSpan.textContent = '...';
             wrongSpan.textContent = '...';
             totalSpan.textContent = '...';
 
             const predictionsList = await getPredictionsForUser(userName);
-            let correct = 0,
-                wrong = 0;
+            let correct = 0, wrong = 0;
             for (let p of predictionsList) {
                 const status = getPredictionStatus(p);
                 if (status.status === 'correct') correct++;
@@ -2045,7 +2909,7 @@
 
             if (!predictionsList || predictionsList.length === 0) {
                 listContainer.innerHTML =
-                    `<div style="text-align:center;padding:20px;color:#888;">📭 لا توجد توقعات لهذا اللاعب</div>`;
+                    `<div class="empty-state"><span class="icon">📭</span> لا توجد توقعات لهذا اللاعب</div>`;
                 document.getElementById('playerPredictionsModal').classList.add('active');
                 document.body.style.overflow = 'hidden';
                 return;
@@ -2065,16 +2929,16 @@
                     statusText = '❌ خاطئ'; }
 
                 html += `
-                    <div class="prediction-item">
-                        <div>
-                            <span style="font-weight:bold;color:#006400;">#${idx + 1}</span>
-                            <span>${getFlag(team1)} ${team1} 🆚 ${getFlag(team2)} ${team2}</span>
-                        </div>
-                        <div>
-                            <span class="pred ${status.status === 'correct' ? 'correct' : status.status === 'wrong' ? 'wrong' : ''}">${predText}</span>
+                    <div class="player-prediction-item">
+                        <div class="num">#${idx + 1}</div>
+                        <div class="match-info">
+                            <div class="teams">
+                                <span class="flag">${getFlag(team1)}</span> ${team1} 🆚 <span class="flag">${getFlag(team2)}</span> ${team2}
+                            </div>
+                            <div class="pred">🔮 ${predText}</div>
                             <span class="status ${statusClass}">${statusText}</span>
-                            <span style="font-size:11px;color:#888;display:block;text-align:left;">🕒 ${p.created_at ? new Date(p.created_at).toLocaleDateString('ar-SA') : ''}</span>
                         </div>
+                        <div class="time">🕒 ${p.created_at ? new Date(p.created_at).toLocaleDateString('ar-SA') : 'تاريخ غير معروف'}</div>
                     </div>
                 `;
             });
@@ -2089,27 +2953,72 @@
             document.body.style.overflow = '';
         }
 
+        document.getElementById('playerModalCloseBtn').addEventListener('click', closePlayerPredictionsModal);
+        document.getElementById('playerPredictionsModal').addEventListener('click', function(e) { if (e.target === this) closePlayerPredictionsModal(); });
+
         // ============================================================
-        //  تشغيل التحميل والتحديث التلقائي
+        //  COPY MATCH LINK
+        // ============================================================
+        function copyMatchLink(matchId, team1, team2) {
+            const shareUrl = `${window.location.origin}${window.location.pathname}?m=${matchId}`;
+            if (navigator.share) {
+                navigator.share({
+                    title: `🏆 توقع مباراة ${team1} 🆚 ${team2}`,
+                    text: `🔮 توقع نتيجة مباراة ${team1} 🆚 ${team2} في كأس العالم 2026\n\n🔗 ${shareUrl}`,
+                    url: shareUrl
+                }).catch(() => {});
+            } else {
+                navigator.clipboard.writeText(shareUrl).then(() => showToast('✅ تم نسخ رابط المباراة!'))
+                    .catch(() => {
+                        const textArea = document.createElement('textarea');
+                        textArea.value = shareUrl;
+                        document.body.appendChild(textArea);
+                        textArea.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(textArea);
+                        showToast('✅ تم نسخ رابط المباراة!');
+                    });
+            }
+        }
+
+        // ============================================================
+        //  CLOSE TEAM STATS MODAL
+        // ============================================================
+        document.getElementById('teamStatsCloseBtn').addEventListener('click', function() {
+            document.getElementById('teamStatsModal').classList.remove('active');
+            document.body.style.overflow = '';
+        });
+        document.getElementById('teamStatsModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                document.getElementById('teamStatsModal').classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // ============================================================
+        //  INIT
         // ============================================================
         loadGames();
         setInterval(loadGames, 60000);
 
-        // ربط دوال النوافذ للاستخدام العام
+        // ربط الدوال للاستخدام العام
         window.openNameModal = openNameModal;
         window.closeNameModal = closeNameModal;
         window.openPredictionModal = openPredictionModal;
         window.closePredictionModal = closePredictionModal;
-        window.openTeamStatsModal = openTeamStatsModal;
-        window.closeTeamStatsModal = closeTeamStatsModal;
         window.openViewPredictionsModal = openViewPredictionsModal;
         window.closeViewPredictionsModal = closeViewPredictionsModal;
+        window.openMatchPredictions = openMatchPredictions;
+        window.closeMatchPredictionsModal = closeMatchPredictionsModal;
         window.openPlayerPredictions = openPlayerPredictions;
         window.closePlayerPredictionsModal = closePlayerPredictionsModal;
+        window.openTeamStatsModal = openTeamStatsModal;
         window.loadGames = loadGames;
         window.showToast = showToast;
+        window.toggleTheme = toggleTheme;
+        window.clearCacheAndReload = clearCacheAndReload;
+        window.copyMatchLink = copyMatchLink;
     </script>
 
 </body>
-
 </html>
